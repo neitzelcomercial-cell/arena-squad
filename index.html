@@ -28,7 +28,7 @@
             --radius-sm: 10px;
             --radius-xs: 6px;
         }
-        html { scroll-behavior: smooth; }
+        html { scroll-behavior: smooth; overflow-x: hidden; width: 100%; }
         body {
             font-family: 'Rajdhani', sans-serif;
             background: var(--dark);
@@ -36,7 +36,7 @@
                               radial-gradient(ellipse at 80% 100%, rgba(34,197,94,0.02) 0%, transparent 50%);
             color: #e0e0e0;
             min-height: 100vh;
-            overflow-x: hidden;
+            overflow-x: hidden; width: 100%; position: relative;
             -webkit-font-smoothing: antialiased;
         }
         #matrixCanvas {
@@ -295,40 +295,52 @@
         @keyframes toastIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes toastOut { to { opacity: 0; transform: translateY(20px); } }
 
-        @media (max-width: 600px) {
+        @media (max-width: 748px) {
+            html, body { overflow-x: hidden; width: 100%; }
+            img, video, canvas, iframe { max-width: 100%; height: auto; }
+            input, select, textarea, button { max-width: 100%; box-sizing: border-box; }
+
             .topbar { height: 60px; padding: 0 14px; }
             .topbar-actions { gap: 8px; }
             .topbar-actions button { padding: 10px 14px; font-size: 13px; border-radius: 10px; min-height: 44px; }
             .topbar-brand .icon { width: 40px; height: 40px; font-size: 18px; border-radius: 12px; }
             .topbar-brand h1 { font-size: 16px; }
+
             .year-header { padding: 14px 16px; gap: 10px; }
             .year-header h1 { font-size: 18px; }
             .year-nav button { padding: 10px 16px; font-size: 14px; border-radius: 12px; min-height: 44px; }
+            .year-nav { gap: 8px; }
+
             .side-panel { width: 100vw; top: 60px; height: calc(100vh - 60px); }
             .side-panel .sp-header { padding: 16px 18px; }
             .side-panel .sp-header .sp-day { font-size: 28px; }
             .side-panel .sp-header .sp-date { font-size: 15px; }
             .side-panel .sp-close { padding: 10px 14px; font-size: 22px; }
             .side-panel .sp-body { padding: 12px 14px; }
-            .sp-slot { min-height: 56px; margin-bottom: 8px; border-radius: 12px; }
-            .sp-time { width: 72px; padding: 10px 8px 10px 12px; }
+            .sp-slot { min-height: 56px; margin-bottom: 8px; border-radius: 12px; flex-wrap: wrap; }
+            .sp-time { width: 72px; padding: 10px 8px 10px 12px; flex-shrink: 0; }
             .sp-time .sp-hour { font-size: 14px; }
             .sp-time .sp-sub { font-size: 10px; }
-            .sp-slot-inner { padding: 10px 12px; gap: 6px; }
-            .sp-ev { padding: 8px 12px; gap: 8px; border-radius: 10px; }
+            .sp-slot-inner { padding: 10px 12px; gap: 6px; min-width: 0; flex: 1; }
+            .sp-ev { padding: 8px 12px; gap: 8px; border-radius: 10px; flex-wrap: wrap; }
             .sp-ev .sp-ev-title { font-size: 14px; }
             .sp-ev-tag { font-size: 10px; padding: 3px 8px; }
             .sp-free { font-size: 14px; }
             .sp-slot-inner .sp-free { font-size: 14px; }
             .btn-reservar { padding: 8px 16px; font-size: 12px; min-height: 40px; border-radius: 10px; }
-            .modal { padding: 24px 20px; border-radius: 16px; margin: 12px; }
+            .sp-ev-actions { flex-shrink: 0; }
+
+            .modal-overlay { padding: 8px; }
+            .modal { padding: 24px 20px; border-radius: 16px; margin: 12px; max-width: calc(100vw - 24px); width: calc(100vw - 24px); }
             .modal h2 { font-size: 20px; }
             .modal .modal-sub { font-size: 15px; }
             .modal label { font-size: 14px; }
-            .modal input, .modal select, .modal textarea { padding: 14px 16px; font-size: 16px; border-radius: 12px; margin-bottom: 16px; }
-            .modal-actions { gap: 10px; }
-            .modal-actions button { padding: 14px 20px; font-size: 14px; min-width: 100px; min-height: 48px; border-radius: 12px; }
-            .modal-row > div { min-width: 100%; }
+            .modal input, .modal select, .modal textarea { padding: 14px 16px; font-size: 16px; border-radius: 12px; margin-bottom: 16px; width: 100%; }
+            .modal-actions { gap: 10px; flex-direction: column; }
+            .modal-actions button { padding: 14px 20px; font-size: 14px; min-width: 100%; min-height: 48px; border-radius: 12px; width: 100%; }
+            .modal-row { flex-direction: column; gap: 0; }
+            .modal-row > div { min-width: 100%; width: 100%; }
+
             .week-row { grid-template-columns: 20px repeat(7, 1fr); gap: 2px; }
             .week-row .wd { min-height: 34px; font-size: 13px; border-radius: 8px; }
             .week-row .wn { font-size: 8px; }
@@ -337,78 +349,131 @@
             .month-card .mc-header { padding: 10px 14px; }
             .month-card .mc-header h3 { font-size: 13px; }
             .month-card .mc-body { padding: 6px 8px 8px; }
-            .splash-content { padding: 20px; }
+            .months-grid { gap: 14px; padding: 0 12px 16px; }
+            .mc-legend { font-size: 10px; padding: 6px 10px 8px; }
+
+            .splash-content { padding: 20px; max-width: 100%; }
             .splash-content h1 { font-size: 26px; }
             .splash-btn { padding: 16px 40px; font-size: 17px; letter-spacing: 4px; min-height: 52px; border-radius: 14px; }
-            .toast { font-size: 14px; padding: 14px 20px; margin: 0 12px; border-radius: 14px; }
+            .splash-content .splash-sub { font-size: 15px; }
+            .splash-content .splash-reserve { font-size: 14px; }
+            .splash-footer { font-size: 10px; }
+
+            .toast { font-size: 14px; padding: 14px 20px; border-radius: 14px; left: 8px; right: 8px; transform: none; width: auto; }
+
             .rules-box { font-size: 14px; max-height: 200px; padding: 14px; border-radius: 12px; }
             .pix-box { padding: 20px; border-radius: 14px; }
             .pix-box .pix-title { font-size: 18px; }
             .pix-box .pix-valor { font-size: 28px; }
-            .pix-box .pix-chave { font-size: 14px; padding: 12px; }
-            .btn-copy { padding: 14px 20px; font-size: 14px; min-height: 48px; border-radius: 12px; }
+            .pix-box .pix-chave { font-size: 14px; padding: 12px; word-break: break-all; }
+            .btn-copy { padding: 14px 20px; font-size: 14px; min-height: 48px; border-radius: 12px; width: 100%; }
+
             #estilosGrid, #tipoJogoGrid { grid-template-columns: 1fr 1fr; gap: 8px; }
-            .estilo-item, .tipo-item { padding: 14px 10px !important; font-size: 13px !important; border-radius: 12px !important; min-height: 44px; }
-            .modal input, .modal select, .modal textarea { padding: 14px 16px; font-size: 16px; }
+            .estilo-item, .tipo-item { padding: 14px 10px !important; font-size: 13px !important; border-radius: 12px !important; min-height: 44px; box-sizing: border-box !important; width: 100% !important; }
+
             .step-indicator { gap: 6px; margin-bottom: 18px; }
             .step-dot { height: 6px; }
-            .year-nav { gap: 8px; }
-            .months-grid { gap: 14px; padding: 0 12px 16px; }
-            .mc-legend { font-size: 10px; padding: 6px 10px 8px; }
             .hide-mobile { display: none; }
-            .splash-content .splash-sub { font-size: 15px; }
-            .splash-content .splash-reserve { font-size: 14px; }
+            #vagasList input { width: 100%; }
+
+            /* CARRINHO PELO TOPO */
+            #storeSection .cart-sidebar { width: 100vw; top: 0; left: 0; right: 0; bottom: auto; max-height: 85vh; border-left: none; border-bottom: 1px solid var(--glass-border); transform: translateY(-100%); }
+            #storeSection .cart-sidebar.open { transform: translateY(0); }
+            #storeSection .cart-footer { padding: 12px 16px 16px; }
+            #storeSection .cart-header { padding: 14px 18px; }
+            #storeSection .cart-header h3 { font-size: 16px; }
+            #storeSection .cart-close { font-size: 24px; padding: 8px; }
+            #storeSection .cart-itens { padding: 12px 16px; max-height: 35vh; overflow-y: auto; }
+            #storeSection .cart-item { padding: 10px 0; flex-wrap: wrap; }
+            #storeSection .cart-item .ci-info h4 { font-size: 14px; }
+            #storeSection .cart-item .ci-info .ci-preco { font-size: 14px; }
+            #storeSection .cart-item .ci-qty { margin-top: 4px; }
+            #storeSection .form-ret label { font-size: 12px; }
+            #storeSection .form-ret input, #storeSection .form-ret textarea { padding: 10px 12px; font-size: 14px; min-height: 44px; width: 100%; }
+            #storeSection .btn-final { padding: 14px; font-size: 15px; min-height: 50px; border-radius: 12px; width: 100%; }
+            #storeSection .cart-total { font-size: 16px; }
+            #storeSection .ci-qty button { width: 32px; height: 32px; font-size: 14px; }
+            #storeSection .ci-qty span { font-size: 15px; min-width: 20px; }
+            #storeSection .cart-vazio .ic { font-size: 40px; }
+            #storeSection .cart-vazio { padding: 30px 0; }
+
+            /* LOJA STORE */
             #storeSection .topbar { height: 60px; padding: 0 14px; }
             #storeSection .topbar-logo { font-size: 15px; }
-            #storeSection .topbar-link { font-size: 13px; padding: 8px 12px; min-height: 44px; }
-            #storeSection .cart-btn { padding: 8px 14px; font-size: 13px; min-height: 44px; }
             #storeSection .section { padding: 24px 14px; }
             #storeSection .section-header h2 { font-size: 20px; }
+            #storeSection .section-header { margin-bottom: 14px; }
+            #storeSection .cat-tabs { gap: 6px; flex-wrap: wrap; }
             #storeSection .cat-tab { padding: 8px 16px; font-size: 13px; min-height: 40px; border-radius: 24px; }
             #storeSection .product-grid { grid-template-columns: 1fr; gap: 14px; }
             #storeSection .product-card { border-radius: 16px; }
             #storeSection .product-img { height: 160px; }
+            #storeSection .product-info { padding: 10px 12px 14px; }
             #storeSection .product-info h3 { font-size: 15px; }
             #storeSection .product-info .desc { font-size: 13px; }
             #storeSection .prod-bottom .price { font-size: 18px; }
+            #storeSection .prod-bottom { flex-wrap: wrap; gap: 6px; }
             #storeSection .btn-add { min-width: 44px; height: 44px; font-size: 20px; }
-            #storeSection .cart-sidebar { width: 100vw; }
-            #storeSection .cart-header h3 { font-size: 16px; }
-            #storeSection .cart-header { padding: 14px 18px; }
-            #storeSection .cart-close { font-size: 24px; padding: 8px; }
-            #storeSection .cart-item { padding: 10px 0; }
-            #storeSection .cart-item .ci-info h4 { font-size: 14px; }
-            #storeSection .cart-item .ci-info .ci-preco { font-size: 14px; }
-            #storeSection .form-ret label { font-size: 12px; }
-            #storeSection .form-ret input, #storeSection .form-ret textarea { padding: 10px 12px; font-size: 14px; min-height: 44px; }
-            #storeSection .btn-final { padding: 14px; font-size: 15px; min-height: 50px; border-radius: 12px; }
+            #storeSection .hero { min-height: 30vh; padding: 24px 16px; }
+            #storeSection .hero h1 { font-size: 22px; }
+            #storeSection .hero p { font-size: 14px; }
+            #storeSection .hero-crosshair { display: none; }
+
+            /* ADMIN MAIOR DESTACADO */
+            #storeSection .topbar-right { gap: 8px; }
+            #storeSection .topbar-link { font-size: 13px; padding: 10px 16px; min-height: 44px; }
+            #storeSection .topbar-link.admin-link { font-size: 13px; padding: 10px 18px; min-height: 44px; border: 1px solid rgba(239,68,68,0.3); background: rgba(239,68,68,0.08); border-radius: 10px; color: #f87171; }
+            #storeSection .topbar-link.admin-link:hover { background: rgba(239,68,68,0.18); border-color: #ef4444; }
+            #storeSection .cart-btn { padding: 10px 16px; font-size: 13px; min-height: 44px; }
+            #storeSection .cart-btn .cart-count { font-size: 11px; min-width: 20px; height: 20px; }
+
+            /* ADMIN TABS VERTICAL */
             #storeSection .admin-modal { width: calc(100vw - 24px); max-height: 90vh; }
-            #storeSection .admin-tab { padding: 10px 14px; font-size: 13px; min-height: 44px; }
-            #storeSection .admin-body { padding: 12px 14px; }
-            #storeSection .ae-item { padding: 10px 0; gap: 8px; }
-            #storeSection .ae-item .ae-nome { font-size: 13px; }
+            #storeSection .admin-tabs { flex-direction: column; gap: 2px; padding: 8px 12px; }
+            #storeSection .admin-tab { padding: 12px 14px; font-size: 14px; min-height: 44px; border-bottom: none; border-left: 3px solid transparent; width: 100%; text-align: left; }
+            #storeSection .admin-tab.active { border-bottom: none; border-left-color: var(--green); }
+            #storeSection .admin-body { padding: 12px 14px; min-height: 100px; }
+            #storeSection .admin-modal .am-hd { padding: 14px 16px; }
+            #storeSection .admin-modal .am-hd h3 { font-size: 16px; }
+            #storeSection .admin-modal .am-close { font-size: 24px; padding: 8px; }
+            #storeSection .ae-item { padding: 10px 0; gap: 8px; flex-wrap: wrap; }
+            #storeSection .ae-item .ae-nome { font-size: 13px; min-width: 60px; }
+            #storeSection .ae-item .ae-qty { font-size: 14px; min-width: 30px; }
             #storeSection .ae-item .ae-btn { width: 36px; height: 36px; font-size: 14px; }
             #storeSection .ped-card { padding: 14px; border-radius: 14px; }
             #storeSection .ped-card .pc-cli { font-size: 15px; }
             #storeSection .ped-card .pc-info { font-size: 13px; }
-            #storeSection .hero { min-height: 30vh; padding: 24px 16px; }
-            #storeSection .hero h1 { font-size: 22px; }
-            #storeSection .hero p { font-size: 14px; }
-            #storeSection .admin-login input { padding: 12px 16px; font-size: 16px; width: 120px; }
-            #storeSection .admin-login .btn-m { padding: 12px 28px; font-size: 14px; min-height: 44px; }
+            #storeSection .ped-card .pc-hd { flex-direction: column; gap: 2px; }
+            #storeSection .admin-login { padding: 20px 16px; }
+            #storeSection .admin-login input { padding: 12px 16px; font-size: 16px; width: 100%; max-width: 200px; }
+            #storeSection .admin-login .btn-m { padding: 12px 28px; font-size: 14px; min-height: 44px; width: 100%; max-width: 200px; }
             #storeSection .admin-sair { padding: 12px; font-size: 14px; min-height: 48px; }
-            #storeSection .foto-admin-item { padding: 10px 0; gap: 10px; }
-            #storeSection .foto-admin-item .fai-nome { font-size: 13px; }
-            #storeSection .modal { padding: 24px 20px; }
+            #storeSection .foto-admin-item { padding: 10px 0; gap: 10px; flex-wrap: wrap; }
+
+            #storeSection .modal { padding: 24px 20px; border-radius: 16px; max-width: calc(100vw - 24px); }
             #storeSection .modal h3 { font-size: 18px; }
             #storeSection .modal p { font-size: 14px; }
-            #storeSection .btn-m { padding: 12px 24px; font-size: 14px; min-height: 44px; }
-            #storeSection .pix-box .pix-chave { font-size: 13px; }
-            #storeSection .ci-qty button { width: 32px; height: 32px; font-size: 14px; }
-            #storeSection .ci-qty span { font-size: 15px; min-width: 20px; }
-            #storeSection .admin-modal .am-hd h3 { font-size: 16px; }
-            #storeSection .admin-modal .am-close { font-size: 24px; padding: 8px; }
-            #storeSection .cart-itens { padding: 12px 16px; }
+            #storeSection .modal .m-total { font-size: 22px; }
+            #storeSection .btn-m { padding: 12px 24px; font-size: 14px; min-height: 44px; width: 100%; }
+            #storeSection .pix-box .pix-chave { font-size: 13px; word-break: break-all; }
+            #storeSection .pix-box { padding: 16px; }
+
+            #storeSection #tabFisicos, #storeSection #tabOnline { padding: 10px 20px; font-size: 12px; min-height: 44px; }
+
+            .admin-body table, .admin-body .table-wrap { overflow-x: auto; display: block; width: 100%; }
+            #storeSection *, #calendarSection * { max-width: 100vw; box-sizing: border-box; }
+        }
+        @media (max-width: 380px) {
+            .week-row .wd { min-height: 28px; font-size: 11px; }
+            .week-row .wn { font-size: 7px; }
+            .sp-time { width: 60px; }
+            .sp-time .sp-hour { font-size: 12px; }
+            .splash-content h1 { font-size: 20px; }
+            .splash-btn { padding: 14px 28px; font-size: 14px; letter-spacing: 2px; }
+            .topbar-actions button { padding: 8px 10px; font-size: 11px; }
+            #estilosGrid, #tipoJogoGrid { grid-template-columns: 1fr; }
+            .year-header h1 { font-size: 15px; }
+            .year-nav button { padding: 8px 12px; font-size: 12px; }
         }
     </style>
 <style>
