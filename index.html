@@ -171,11 +171,11 @@
         .week-row .wd.selected { background: rgba(34,197,94,0.25); color: #fff; font-weight: 700; border: 1px solid var(--green); }
         .week-row .wd.holiday { font-weight: 700; color: var(--sand); }
         .week-row .wd .ev-dot { width: 5px; height: 5px; border-radius: 50%; position: absolute; bottom: 2px; }
-        .week-row .wd .ev-dot.green { background: var(--sand); box-shadow: 0 0 6px rgba(34,197,94,0.6); }
-        .week-row .wd .ev-dot.red { background: var(--sand); box-shadow: 0 0 6px rgba(34,197,94,0.6); }
-        .week-row .wd .ev-dot.blue { background: var(--sand); box-shadow: 0 0 6px rgba(34,197,94,0.6); }
-        .week-row .wd .ev-dot.purple { background: var(--sand); box-shadow: 0 0 6px rgba(34,197,94,0.6); }
-        .week-row .wd .ev-dot.yellow { background: var(--sand); box-shadow: 0 0 6px rgba(34,197,94,0.6); }
+        .week-row .wd .ev-dot.green { background: #22c55e; box-shadow: 0 0 6px rgba(34,197,94,0.6); }
+        .week-row .wd .ev-dot.red { background: #ef4444; box-shadow: 0 0 6px rgba(239,68,68,0.6); }
+        .week-row .wd .ev-dot.blue { background: #3b82f6; box-shadow: 0 0 6px rgba(59,130,246,0.6); }
+        .week-row .wd .ev-dot.purple { background: #a855f7; box-shadow: 0 0 6px rgba(168,85,247,0.6); }
+        .week-row .wd .ev-dot.yellow { background: #eab308; box-shadow: 0 0 6px rgba(234,179,8,0.6); }
         .mc-legend { display: flex; gap: 4px; flex-wrap: wrap; padding: 4px 10px 6px; border-top: 1px solid var(--glass-border); font-size: 9px; color: rgba(255,255,255,0.2); }
 
         .side-panel { position: fixed; top: 60px; right: 0; width: min(440px, 100vw); height: calc(100vh - 60px); background: rgba(10,10,10,0.92); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border-left: 1px solid var(--glass-border); box-shadow: -8px 0 40px rgba(0,0,0,0.5); z-index: 50; transform: translateX(100%); transition: transform .35s cubic-bezier(.22,1,.36,1); display: flex; flex-direction: column; }
@@ -191,6 +191,8 @@
         .sp-slot:hover { background: rgba(255,255,255,0.05); }
         .sp-slot.ocupado { background: rgba(34,197,94,0.06); border: 1px solid rgba(34,197,94,0.15); }
         .sp-slot.reservado { background: rgba(139,92,246,0.06); border: 1px solid rgba(139,92,246,0.15); }
+        .sp-slot.evento-especial { background: rgba(234,179,8,0.06); border: 1px solid rgba(234,179,8,0.15); }
+        .sp-slot.fechada { background: rgba(239,68,68,0.06); border: 1px solid rgba(239,68,68,0.15); }
         .sp-time { width: 70px; flex-shrink: 0; padding: 10px 8px 10px 12px; display: flex; flex-direction: column; align-items: flex-end; justify-content: center; border-right: 1px solid var(--glass-border); }
         .sp-time .sp-hour { font-size: clamp(12px, 2.5vw, 13px); font-weight: 700; color: var(--green); font-family: 'Orbitron', monospace; line-height: 1.2; }
         .sp-time .sp-sub { font-size: 9px; font-weight: 500; color: rgba(255,255,255,0.25); }
@@ -200,6 +202,10 @@
         .sp-ev.reuniao { border-left-color: var(--sand); }
         .sp-ev.prazo { border-left-color: var(--sand); }
         .sp-ev.reservado { border-left-color: var(--sand); background: rgba(34,197,94,0.08); }
+        .sp-ev.evento-especial { border-left-color: #eab308; background: rgba(234,179,8,0.1); }
+        .sp-ev.fechada { border-left-color: #ef4444; background: rgba(239,68,68,0.1); }
+        .sp-ev-tag.evento-especial { background: rgba(234,179,8,0.15); color: #eab308; }
+        .sp-ev-tag.fechada { background: rgba(239,68,68,0.15); color: #ef4444; }
         .sp-ev .sp-ev-title { flex: 1; font-size: clamp(12px, 2.5vw, 13px); font-weight: 600; color: #ddd; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
         .sp-ev .sp-ev-tag { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; padding: 2px 6px; border-radius: 4px; background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.4); flex-shrink: 0; }
         .btn-reservar { background: linear-gradient(135deg, var(--green-dark), var(--green)); color: #fff; border: none; padding: 6px 14px; border-radius: 8px; cursor: pointer; font-size: 12px; font-weight: 700; font-family: 'Rajdhani', sans-serif; text-transform: uppercase; letter-spacing: 1px; transition: all .2s; align-self: flex-start; }
@@ -686,11 +692,25 @@ body {font-family:'Rajdhani',sans-serif;background:var(--dark);color:#e0e0e0;min
         if (holiday) html += `<div class="sp-holiday">⬜ ${holiday}</div><div style="height:8px;"></div>`;
         TIME_SLOTS.forEach(slot => {
             const endH = SLOT_END[slot], reserva = isReservado(ds, slot), slotEvs = dayEvs.filter(e => e.time === slot);
-            const cls = reserva ? 'sp-slot reservado' : (slotEvs.length > 0 ? 'sp-slot ocupado' : 'sp-slot');
+            let cls = 'sp-slot';
+            if (reserva) {
+                if (reserva.tipo === 'evento especial') cls += ' evento-especial';
+                else if (reserva.tipo === 'fechada') cls += ' fechada';
+                else cls += ' reservado';
+            } else if (slotEvs.length > 0) {
+                cls += ' ocupado';
+            }
             html += `<div class="${cls}"><div class="sp-time"><div class="sp-hour">${slot}</div><div class="sp-sub">${endH}</div></div><div class="sp-slot-inner">`;
             if (reserva) {
                 const showV = reserva.vagas && reserva.vagas.length > 0, vo = showV ? reserva.vagas.filter(v => v.ocupado).length : 0;
-                html += `<div class="sp-ev reservado"><div style="flex:1;min-width:0;"><div class="sp-ev-title">◆ ${reserva.nome}</div>${showV ? `<div style="font-size:11px;color:var(--sand-dark);">◆ ${vo}/${reserva.vagas.length} vagas</div>` : ''}</div><span class="sp-ev-tag">${reserva.tipo||'RES'}</span>${showV ? `<button class="btn-reservar" style="padding:3px 8px;font-size:10px;" onclick="event.stopPropagation();verVagas('${ds}','${slot}')">Vagas</button>` : ''}<div class="sp-ev-actions"><button class="del" onclick="excluirReserva('${ds}','${slot}')">✕</button></div></div>`;
+                let evCls = 'sp-ev';
+                if (reserva.tipo === 'evento especial') evCls += ' evento-especial';
+                else if (reserva.tipo === 'fechada') evCls += ' fechada';
+                else evCls += ' reservado';
+                let tagCls = 'sp-ev-tag';
+                if (reserva.tipo === 'evento especial') tagCls += ' evento-especial';
+                else if (reserva.tipo === 'fechada') tagCls += ' fechada';
+                html += `<div class="${evCls}"><div style="flex:1;min-width:0;"><div class="sp-ev-title">${reserva.tipo === 'fechada' ? '⬛' : '◆'} ${reserva.nome}</div>${showV ? `<div style="font-size:11px;color:var(--sand-dark);">◆ ${vo}/${reserva.vagas.length} vagas</div>` : ''}</div><span class="${tagCls}">${reserva.tipo||'RES'}</span>${showV ? `<button class="btn-reservar" style="padding:3px 8px;font-size:10px;" onclick="event.stopPropagation();verVagas('${ds}','${slot}')">Vagas</button>` : ''}<div class="sp-ev-actions"><button class="del" onclick="excluirReserva('${ds}','${slot}')">✕</button></div></div>`;
             } else if (slotEvs.length > 0) {
                 slotEvs.forEach(e => html += `<div class="sp-ev ${e.type||'evento'}"><div class="sp-ev-title">${esc(e.title)}</div><span class="sp-ev-tag">${TYPE_LABELS[e.type]||'Jogo'}</span></div>`);
             } else {
@@ -699,7 +719,7 @@ body {font-family:'Rajdhani',sans-serif;background:var(--dark);color:#e0e0e0;min
             html += `</div></div>`;
         });
         html += `<div style="margin-top:14px;padding-top:12px;border-top:2px dashed rgba(255,255,255,0.06);">
-            <button class="btn-reservar" onclick="arenaFechada('${ds}')" style="width:100%;padding:12px;font-size:14px;background:linear-gradient(135deg,#166534,#22c55e);">⬛ Fechamento Arena</button>
+            <button class="btn-reservar" onclick="arenaFechada('${ds}')" style="width:100%;padding:12px;font-size:14px;background:linear-gradient(135deg,#dc2626,#ef4444);">⬛ Fechamento Arena</button>
             <p style="font-size:10px;color:rgba(255,255,255,0.2);text-align:center;margin-top:6px;">Senha admin necessária</p>
         </div>`;
         document.getElementById('spBody').innerHTML = html;
@@ -1503,7 +1523,11 @@ function toggleStore(){
   var s=document.getElementById('storeSection');
   var c=document.getElementById('calendarSection');
   if(!s||!c)return;
-  if(s.style.display!='block'){s.style.display='block';c.style.display='none';document.body.style.overflow='hidden'}
+  if(s.style.display!='block'){
+    var p=prompt('◆ Digite a senha de administrador para acessar:');
+    if(!p||p!='99'){alert('Acesso negado!');return}
+    s.style.display='block';c.style.display='none';document.body.style.overflow='hidden'
+  }
   else{s.style.display='none';c.style.display='block';document.body.style.overflow=''}
 }
 function fecharStore(){
