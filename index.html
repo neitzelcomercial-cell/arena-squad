@@ -296,45 +296,119 @@
         @keyframes toastOut { to { opacity: 0; transform: translateY(20px); } }
 
         @media (max-width: 600px) {
-            .topbar { height: 54px; padding: 0 12px; }
-            .topbar-actions { gap: 6px; }
-            .topbar-actions button { padding: 6px 10px; font-size: 10px; border-radius: 8px; }
-            .year-header { padding: 12px 14px; gap: 8px; }
-            .side-panel { width: 100vw; top: 54px; height: calc(100vh - 54px); }
-            .side-panel .sp-header { padding: 12px 14px; }
-            .side-panel .sp-body { padding: 8px 12px; }
-            .sp-slot { min-height: 44px; margin-bottom: 6px; border-radius: 10px; }
-            .sp-time { width: 60px; padding: 8px 6px 8px 10px; }
-            .sp-time .sp-hour { font-size: 12px; }
-            .sp-slot-inner { padding: 6px 10px; }
-            .sp-ev { padding: 5px 8px; gap: 6px; }
-            .sp-ev .sp-ev-title { font-size: 12px; }
-            .sp-ev-tag { font-size: 8px; padding: 1px 5px; }
-            .sp-free { font-size: 12px; }
-            .btn-reservar { padding: 5px 10px; font-size: 10px; }
-            .modal { padding: 20px; border-radius: 14px; margin: 8px; }
-            .modal-actions button { padding: 10px 16px; font-size: 12px; min-width: 80px; }
-            .week-row { grid-template-columns: 18px repeat(7, 1fr); gap: 1.5px; }
-            .week-row .wd { min-height: 22px; font-size: 10px; border-radius: 6px; }
-            .week-row .wn { font-size: 7px; }
-            .month-card { border-radius: 14px; }
-            .month-card .mc-header { padding: 7px 10px; }
-            .month-card .mc-header h3 { font-size: 11px; }
-            .month-card .mc-body { padding: 3px 5px 5px; }
-            .splash-content { padding: 16px; }
-            .splash-btn { padding: 14px 36px; letter-spacing: 3px; }
-            .toast { font-size: 12px; padding: 10px 16px; margin: 0 8px; }
-            .rules-box { font-size: 12px; max-height: 150px; padding: 12px; }
-            .pix-box { padding: 16px; }
-            .pix-box .pix-valor { font-size: 24px; }
-            #estilosGrid, #tipoJogoGrid { grid-template-columns: 1fr 1fr; gap: 4px; }
-            .estilo-item, .tipo-item { padding: 8px 6px !important; font-size: 10px !important; }
-            .modal input, .modal select, .modal textarea { padding: 10px 12px; font-size: 14px; }
-            .step-indicator { gap: 4px; }
-            .year-nav button { padding: 5px 10px; font-size: 11px; }
-            .months-grid { gap: 10px; padding: 0 10px 12px; }
-            .mc-legend { font-size: 8px; padding: 3px 8px 5px; }
+            .topbar { height: 60px; padding: 0 14px; }
+            .topbar-actions { gap: 8px; }
+            .topbar-actions button { padding: 10px 14px; font-size: 13px; border-radius: 10px; min-height: 44px; }
+            .topbar-brand .icon { width: 40px; height: 40px; font-size: 18px; border-radius: 12px; }
+            .topbar-brand h1 { font-size: 16px; }
+            .year-header { padding: 14px 16px; gap: 10px; }
+            .year-header h1 { font-size: 18px; }
+            .year-nav button { padding: 10px 16px; font-size: 14px; border-radius: 12px; min-height: 44px; }
+            .side-panel { width: 100vw; top: 60px; height: calc(100vh - 60px); }
+            .side-panel .sp-header { padding: 16px 18px; }
+            .side-panel .sp-header .sp-day { font-size: 28px; }
+            .side-panel .sp-header .sp-date { font-size: 15px; }
+            .side-panel .sp-close { padding: 10px 14px; font-size: 22px; }
+            .side-panel .sp-body { padding: 12px 14px; }
+            .sp-slot { min-height: 56px; margin-bottom: 8px; border-radius: 12px; }
+            .sp-time { width: 72px; padding: 10px 8px 10px 12px; }
+            .sp-time .sp-hour { font-size: 14px; }
+            .sp-time .sp-sub { font-size: 10px; }
+            .sp-slot-inner { padding: 10px 12px; gap: 6px; }
+            .sp-ev { padding: 8px 12px; gap: 8px; border-radius: 10px; }
+            .sp-ev .sp-ev-title { font-size: 14px; }
+            .sp-ev-tag { font-size: 10px; padding: 3px 8px; }
+            .sp-free { font-size: 14px; }
+            .sp-slot-inner .sp-free { font-size: 14px; }
+            .btn-reservar { padding: 8px 16px; font-size: 12px; min-height: 40px; border-radius: 10px; }
+            .modal { padding: 24px 20px; border-radius: 16px; margin: 12px; }
+            .modal h2 { font-size: 20px; }
+            .modal .modal-sub { font-size: 15px; }
+            .modal label { font-size: 14px; }
+            .modal input, .modal select, .modal textarea { padding: 14px 16px; font-size: 16px; border-radius: 12px; margin-bottom: 16px; }
+            .modal-actions { gap: 10px; }
+            .modal-actions button { padding: 14px 20px; font-size: 14px; min-width: 100px; min-height: 48px; border-radius: 12px; }
+            .modal-row > div { min-width: 100%; }
+            .week-row { grid-template-columns: 20px repeat(7, 1fr); gap: 2px; }
+            .week-row .wd { min-height: 34px; font-size: 13px; border-radius: 8px; }
+            .week-row .wn { font-size: 8px; }
+            .week-row .wd .ev-dot { width: 6px; height: 6px; bottom: 3px; }
+            .month-card { border-radius: 16px; }
+            .month-card .mc-header { padding: 10px 14px; }
+            .month-card .mc-header h3 { font-size: 13px; }
+            .month-card .mc-body { padding: 6px 8px 8px; }
+            .splash-content { padding: 20px; }
+            .splash-content h1 { font-size: 26px; }
+            .splash-btn { padding: 16px 40px; font-size: 17px; letter-spacing: 4px; min-height: 52px; border-radius: 14px; }
+            .toast { font-size: 14px; padding: 14px 20px; margin: 0 12px; border-radius: 14px; }
+            .rules-box { font-size: 14px; max-height: 200px; padding: 14px; border-radius: 12px; }
+            .pix-box { padding: 20px; border-radius: 14px; }
+            .pix-box .pix-title { font-size: 18px; }
+            .pix-box .pix-valor { font-size: 28px; }
+            .pix-box .pix-chave { font-size: 14px; padding: 12px; }
+            .btn-copy { padding: 14px 20px; font-size: 14px; min-height: 48px; border-radius: 12px; }
+            #estilosGrid, #tipoJogoGrid { grid-template-columns: 1fr 1fr; gap: 8px; }
+            .estilo-item, .tipo-item { padding: 14px 10px !important; font-size: 13px !important; border-radius: 12px !important; min-height: 44px; }
+            .modal input, .modal select, .modal textarea { padding: 14px 16px; font-size: 16px; }
+            .step-indicator { gap: 6px; margin-bottom: 18px; }
+            .step-dot { height: 6px; }
+            .year-nav { gap: 8px; }
+            .months-grid { gap: 14px; padding: 0 12px 16px; }
+            .mc-legend { font-size: 10px; padding: 6px 10px 8px; }
             .hide-mobile { display: none; }
+            .splash-content .splash-sub { font-size: 15px; }
+            .splash-content .splash-reserve { font-size: 14px; }
+            #storeSection .topbar { height: 60px; padding: 0 14px; }
+            #storeSection .topbar-logo { font-size: 15px; }
+            #storeSection .topbar-link { font-size: 13px; padding: 8px 12px; min-height: 44px; }
+            #storeSection .cart-btn { padding: 8px 14px; font-size: 13px; min-height: 44px; }
+            #storeSection .section { padding: 24px 14px; }
+            #storeSection .section-header h2 { font-size: 20px; }
+            #storeSection .cat-tab { padding: 8px 16px; font-size: 13px; min-height: 40px; border-radius: 24px; }
+            #storeSection .product-grid { grid-template-columns: 1fr; gap: 14px; }
+            #storeSection .product-card { border-radius: 16px; }
+            #storeSection .product-img { height: 160px; }
+            #storeSection .product-info h3 { font-size: 15px; }
+            #storeSection .product-info .desc { font-size: 13px; }
+            #storeSection .prod-bottom .price { font-size: 18px; }
+            #storeSection .btn-add { min-width: 44px; height: 44px; font-size: 20px; }
+            #storeSection .cart-sidebar { width: 100vw; }
+            #storeSection .cart-header h3 { font-size: 16px; }
+            #storeSection .cart-header { padding: 14px 18px; }
+            #storeSection .cart-close { font-size: 24px; padding: 8px; }
+            #storeSection .cart-item { padding: 10px 0; }
+            #storeSection .cart-item .ci-info h4 { font-size: 14px; }
+            #storeSection .cart-item .ci-info .ci-preco { font-size: 14px; }
+            #storeSection .form-ret label { font-size: 12px; }
+            #storeSection .form-ret input, #storeSection .form-ret textarea { padding: 10px 12px; font-size: 14px; min-height: 44px; }
+            #storeSection .btn-final { padding: 14px; font-size: 15px; min-height: 50px; border-radius: 12px; }
+            #storeSection .admin-modal { width: calc(100vw - 24px); max-height: 90vh; }
+            #storeSection .admin-tab { padding: 10px 14px; font-size: 13px; min-height: 44px; }
+            #storeSection .admin-body { padding: 12px 14px; }
+            #storeSection .ae-item { padding: 10px 0; gap: 8px; }
+            #storeSection .ae-item .ae-nome { font-size: 13px; }
+            #storeSection .ae-item .ae-btn { width: 36px; height: 36px; font-size: 14px; }
+            #storeSection .ped-card { padding: 14px; border-radius: 14px; }
+            #storeSection .ped-card .pc-cli { font-size: 15px; }
+            #storeSection .ped-card .pc-info { font-size: 13px; }
+            #storeSection .hero { min-height: 30vh; padding: 24px 16px; }
+            #storeSection .hero h1 { font-size: 22px; }
+            #storeSection .hero p { font-size: 14px; }
+            #storeSection .admin-login input { padding: 12px 16px; font-size: 16px; width: 120px; }
+            #storeSection .admin-login .btn-m { padding: 12px 28px; font-size: 14px; min-height: 44px; }
+            #storeSection .admin-sair { padding: 12px; font-size: 14px; min-height: 48px; }
+            #storeSection .foto-admin-item { padding: 10px 0; gap: 10px; }
+            #storeSection .foto-admin-item .fai-nome { font-size: 13px; }
+            #storeSection .modal { padding: 24px 20px; }
+            #storeSection .modal h3 { font-size: 18px; }
+            #storeSection .modal p { font-size: 14px; }
+            #storeSection .btn-m { padding: 12px 24px; font-size: 14px; min-height: 44px; }
+            #storeSection .pix-box .pix-chave { font-size: 13px; }
+            #storeSection .ci-qty button { width: 32px; height: 32px; font-size: 14px; }
+            #storeSection .ci-qty span { font-size: 15px; min-width: 20px; }
+            #storeSection .admin-modal .am-hd h3 { font-size: 16px; }
+            #storeSection .admin-modal .am-close { font-size: 24px; padding: 8px; }
+            #storeSection .cart-itens { padding: 12px 16px; }
         }
     </style>
 <style>
@@ -961,9 +1035,6 @@ body {font-family:'Rajdhani',sans-serif;background:var(--dark);color:#e0e0e0;min
     });
 
     load(); render();
-
-    const n = new Date();
-    if (n.getFullYear() === state.year) openPanel(n.getDate(), n.getMonth());
 </script>
 
 </div>
