@@ -1,0 +1,5 @@
+*.transferir
+Untitled query*
+node_modules/
+.env
+.git/

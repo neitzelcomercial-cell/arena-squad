@@ -1,0 +1,1465 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arena Squad — Airsoft & Aventura</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&family=Special+Elite&display=swap" rel="stylesheet">
+    <style>
+        /* ============================================
+           RESET & ROOT
+           ============================================ */
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        :root {
+            --green: #22c55e;
+            --green-dark: #166534;
+            --green-glass: rgba(34,197,94,0.18);
+            --green-glow: rgba(34,197,94,0.35);
+            --red: #ef4444;
+            --sand: #d4d4d4;
+            --sand-dark: #a1a1aa;
+            --dark: #0a0a0a;
+            --dark-2: #111;
+            --glass-bg: rgba(255,255,255,0.06);
+            --glass-bg-2: rgba(255,255,255,0.03);
+            --glass-border: rgba(255,255,255,0.10);
+            --glass-border-2: rgba(34,197,94,0.12);
+            --radius: 16px;
+            --radius-sm: 10px;
+        }
+        html { scroll-behavior: smooth; overflow-x: hidden; }
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background: var(--dark);
+            background-image: radial-gradient(ellipse at 50% 0%, rgba(34,197,94,0.03) 0%, transparent 60%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--dark); }
+        ::-webkit-scrollbar-thumb { background: #222; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #333; }
+
+        /* ============================================
+           UTILITIES
+           ============================================ */
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+        .section-tag {
+            display: inline-block;
+            font-family: 'Special Elite', monospace;
+            font-size: 12px;
+            color: var(--green);
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            position: relative;
+            padding-left: 28px;
+        }
+        .section-tag::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            width: 20px;
+            height: 1px;
+            background: var(--green);
+        }
+        .section-title {
+            font-family: 'Orbitron', monospace;
+            font-size: clamp(26px, 5vw, 36px);
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+        .section-title span { color: var(--green); }
+        .section-desc {
+            font-size: clamp(15px, 2vw, 17px);
+            color: var(--sand-dark);
+            max-width: 600px;
+            line-height: 1.6;
+        }
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity .7s ease, transform .7s ease;
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ============================================
+           HERO
+           ============================================ */
+        #hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+            overflow: hidden;
+        }
+        #hero .hero-bg {
+            position: absolute;
+            inset: 0;
+            background-image: url('Logo realista.jpeg');
+            background-size: cover;
+            background-position: center;
+            filter: blur(2px) brightness(0.4);
+            animation: heroZoom 20s ease-in-out infinite alternate;
+            transform: scale(1.05);
+        }
+        @keyframes heroZoom {
+            0% { transform: scale(1.05); }
+            100% { transform: scale(1.15); }
+        }
+        #hero .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(0,0,0,0.5), rgba(0,0,0,0.2), rgba(0,0,0,0.7));
+        }
+        #hero .hero-scrim {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 120px;
+            background: linear-gradient(0deg, var(--dark), transparent);
+        }
+        .hero-crosshair {
+            position: absolute;
+            pointer-events: none;
+            opacity: 0.06;
+        }
+        .hero-crosshair::before {
+            content: '';
+            position: absolute;
+            width: 80px;
+            height: 1px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--green);
+            box-shadow: -120px 0 0 var(--green), 120px 0 0 var(--green);
+        }
+        .hero-crosshair::after {
+            content: '';
+            position: absolute;
+            width: 1px;
+            height: 80px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--green);
+            box-shadow: 0 -120px 0 var(--green), 0 120px 0 var(--green);
+        }
+        .hero-corner {
+            position: absolute;
+            pointer-events: none;
+            opacity: 0.10;
+        }
+        .hero-corner.tl { top: 24px; left: 24px; border-top: 2px solid var(--green); border-left: 2px solid var(--green); width: 40px; height: 40px; }
+        .hero-corner.tr { top: 24px; right: 24px; border-top: 2px solid var(--green); border-right: 2px solid var(--green); width: 40px; height: 40px; }
+        .hero-corner.bl { bottom: 24px; left: 24px; border-bottom: 2px solid var(--green); border-left: 2px solid var(--green); width: 40px; height: 40px; }
+        .hero-corner.br { bottom: 24px; right: 24px; border-bottom: 2px solid var(--green); border-right: 2px solid var(--green); width: 40px; height: 40px; }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+            max-width: 700px;
+            animation: heroFadeIn 1.5s ease forwards;
+        }
+        @keyframes heroFadeIn {
+            0% { opacity: 0; transform: translateY(30px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        .hero-logo-wrapper {
+            position: relative;
+            display: inline-flex;
+            margin-bottom: 4px;
+        }
+        .hero-logo-wrapper::before {
+            content: '';
+            position: absolute;
+            inset: -12px;
+            background: radial-gradient(circle, rgba(34,197,94,0.15) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: heroGlow 3s ease-in-out infinite;
+        }
+        @keyframes heroGlow {
+            0%, 100% { opacity: 0.6; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.08); }
+        }
+        @keyframes logoPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+        }
+        .hero-logo {
+            width: min(130px, 30vw);
+            height: min(130px, 30vw);
+            object-fit: contain;
+            filter: drop-shadow(0 0 20px rgba(34,197,94,0.3));
+            animation: logoPulse 4s ease-in-out infinite;
+            position: relative;
+            z-index: 1;
+        }
+        .hero-title {
+            font-family: 'Special Elite', 'Orbitron', monospace;
+            font-size: clamp(30px, 7vw, 56px);
+            font-weight: 400;
+            letter-spacing: 4px;
+            text-shadow: 0 2px 30px rgba(0,0,0,0.5);
+            line-height: 1.15;
+        }
+        .hero-title .arena { color: var(--green); }
+        .hero-title .squad { color: var(--sand); }
+        .hero-sub {
+            font-size: clamp(14px, 2.5vw, 18px);
+            color: rgba(255,255,255,0.5);
+            letter-spacing: 4px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        .hero-badges {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            justify-content: center;
+            font-size: clamp(12px, 2vw, 14px);
+            color: rgba(255,255,255,0.3);
+            letter-spacing: 2px;
+        }
+        .hero-badges span { display: flex; align-items: center; gap: 6px; }
+        .hero-badges span::before { content: '◆'; color: var(--green); font-size: 8px; }
+
+        .hero-actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 8px;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, var(--green-dark), var(--green));
+            color: #fff;
+            border: none;
+            padding: 16px 44px;
+            border-radius: 14px;
+            font-size: clamp(15px, 3vw, 17px);
+            font-weight: 700;
+            cursor: pointer;
+            font-family: 'Rajdhani', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            transition: all .3s ease;
+            box-shadow: 0 0 24px rgba(34,197,94,0.15);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-primary:hover {
+            box-shadow: 0 0 50px rgba(34,197,94,0.3);
+            transform: translateY(-3px);
+        }
+        .btn-secondary {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            color: var(--green);
+            padding: 16px 44px;
+            border-radius: 14px;
+            font-size: clamp(15px, 3vw, 17px);
+            font-weight: 700;
+            cursor: pointer;
+            font-family: 'Rajdhani', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            transition: all .3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-secondary:hover {
+            background: var(--green-glass);
+            border-color: rgba(34,197,94,0.5);
+            transform: translateY(-3px);
+        }
+        .hero-scroll-hint {
+            position: absolute;
+            bottom: 40px;
+            z-index: 2;
+            color: rgba(255,255,255,0.5);
+            font-size: 13px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            animation: scrollBounce 2s ease-in-out infinite;
+            cursor: pointer;
+            text-shadow: 0 2px 12px rgba(0,0,0,0.6);
+            background: rgba(34,197,94,0.08);
+            padding: 8px 20px;
+            border-radius: 20px;
+            border: 1px solid rgba(34,197,94,0.15);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+        .hero-scroll-hint:hover {
+            background: rgba(34,197,94,0.15);
+            border-color: rgba(34,197,94,0.3);
+        }
+        @keyframes scrollBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(8px); }
+        }
+
+        /* ============================================
+           NAVBAR
+           ============================================ */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: rgba(10,10,10,0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 0 clamp(16px, 3vw, 28px);
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transform: translateY(-100%);
+            transition: transform .4s ease;
+        }
+        .navbar.show { transform: translateY(0); }
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: var(--green);
+            font-family: 'Special Elite', 'Orbitron', monospace;
+            font-size: clamp(14px, 3vw, 17px);
+            letter-spacing: 2px;
+        }
+        .navbar-brand .icon {
+            width: 32px;
+            height: 32px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+        }
+        .navbar-brand span { color: var(--sand); }
+        .nav-links {
+            display: flex;
+            gap: 6px;
+            list-style: none;
+        }
+        .nav-links a {
+            color: var(--sand-dark);
+            text-decoration: none;
+            font-size: clamp(12px, 1.5vw, 14px);
+            font-weight: 600;
+            padding: 6px 12px;
+            border-radius: 8px;
+            transition: all .25s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .nav-links a:hover {
+            color: var(--green);
+            background: var(--green-glass);
+        }
+        .nav-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--sand);
+            font-size: 24px;
+            cursor: pointer;
+            padding: 4px;
+        }
+
+        /* ============================================
+           SECTION — GERAL
+           ============================================ */
+        section {
+            position: relative;
+            padding: clamp(60px, 10vh, 100px) 0;
+            border-bottom: 1px solid rgba(255,255,255,0.03);
+        }
+        section:last-of-type { border-bottom: none; }
+        .section-header {
+            text-align: center;
+            margin-bottom: clamp(40px, 7vh, 60px);
+        }
+        .section-header .section-desc { margin: 0 auto; }
+
+        /* ============================================
+           HISTÓRIA
+           ============================================ */
+        #historia { background: radial-gradient(ellipse at 30% 50%, rgba(34,197,94,0.02) 0%, transparent 60%); }
+        .historia-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: clamp(30px, 5vw, 60px);
+            align-items: center;
+        }
+        .historia-texto p {
+            font-size: clamp(15px, 2vw, 17px);
+            line-height: 1.8;
+            color: #bbb;
+            margin-bottom: 16px;
+        }
+        .historia-texto p:last-child { margin-bottom: 0; }
+        .historia-texto strong { color: var(--green); }
+        .historia-imagem {
+            width: 100%;
+            border-radius: var(--radius);
+            overflow: hidden;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+        }
+        .historia-imagem img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .timeline {
+            margin-top: 32px;
+            display: flex;
+            gap: 0;
+            flex-wrap: wrap;
+        }
+        .timeline-item {
+            flex: 1;
+            min-width: 160px;
+            padding: 16px 20px;
+            border-left: 2px solid var(--green-glass);
+            position: relative;
+        }
+        .timeline-item:first-child { border-left-color: var(--green); }
+        .timeline-item::before {
+            content: '◆';
+            position: absolute;
+            left: -9px;
+            top: 16px;
+            font-size: 12px;
+            color: var(--green);
+        }
+        .timeline-item .tl-ano {
+            font-family: 'Orbitron', monospace;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--green);
+        }
+        .timeline-item .tl-texto {
+            font-size: 13px;
+            color: var(--sand-dark);
+            margin-top: 4px;
+        }
+
+        /* ============================================
+           VALORES
+           ============================================ */
+        #valores { background: radial-gradient(ellipse at 70% 50%, rgba(34,197,94,0.02) 0%, transparent 60%); }
+        .valores-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
+            gap: 20px;
+        }
+        .valor-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius);
+            padding: 28px 24px;
+            text-align: center;
+            transition: all .35s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .valor-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--green), transparent);
+            opacity: 0;
+            transition: opacity .35s;
+        }
+        .valor-card:hover {
+            transform: translateY(-6px);
+            border-color: rgba(34,197,94,0.3);
+            box-shadow: 0 12px 40px rgba(34,197,94,0.08);
+        }
+        .valor-card:hover::after { opacity: 1; }
+        .valor-card .vc-icon {
+            font-size: 36px;
+            margin-bottom: 12px;
+            display: block;
+        }
+        .valor-card h3 {
+            font-family: 'Orbitron', monospace;
+            font-size: 16px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .valor-card h3 span { color: var(--green); }
+        .valor-card p {
+            font-size: 14px;
+            color: var(--sand-dark);
+            line-height: 1.6;
+        }
+
+        /* ============================================
+           AIRSOFT
+           ============================================ */
+        #airsoft {
+            background:
+                radial-gradient(ellipse at 50% 0%, rgba(34,197,94,0.03) 0%, transparent 60%),
+                radial-gradient(ellipse at 50% 100%, rgba(34,197,94,0.02) 0%, transparent 50%);
+        }
+        .airsoft-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: clamp(30px, 5vw, 60px);
+            align-items: center;
+        }
+        .airsoft-texto p {
+            font-size: clamp(15px, 2vw, 17px);
+            line-height: 1.8;
+            color: #bbb;
+            margin-bottom: 16px;
+        }
+        .airsoft-texto p:last-child { margin-bottom: 0; }
+        .airsoft-texto strong { color: var(--green); }
+        .airsoft-fatos {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 20px;
+        }
+        .fato-item {
+            background: var(--glass-bg-2);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-sm);
+            padding: 16px 14px;
+            text-align: center;
+        }
+        .fato-item .fi-num {
+            font-family: 'Orbitron', monospace;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--green);
+        }
+        .fato-item .fi-label {
+            font-size: 12px;
+            color: var(--sand-dark);
+            margin-top: 4px;
+        }
+
+        /* ============================================
+           ESPAÇO / GALERIA
+           ============================================ */
+        #espaco {
+            background: radial-gradient(ellipse at 30% 50%, rgba(34,197,94,0.02) 0%, transparent 60%);
+        }
+        .espaco-texto {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto clamp(30px, 5vh, 40px);
+            font-size: clamp(15px, 2vw, 17px);
+            line-height: 1.8;
+            color: #bbb;
+        }
+        .galeria-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(min(260px, 100%), 1fr));
+            gap: 16px;
+        }
+        .galeria-item {
+            position: relative;
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+            cursor: pointer;
+            aspect-ratio: 4/3;
+            border: 1px solid var(--glass-border);
+            transition: all .35s ease;
+        }
+        .galeria-item:hover {
+            transform: scale(1.03);
+            border-color: var(--green);
+            box-shadow: 0 8px 30px rgba(34,197,94,0.15);
+        }
+        .galeria-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform .5s ease;
+        }
+        .galeria-item:hover img { transform: scale(1.1); }
+        .galeria-item .gi-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(0deg, rgba(0,0,0,0.5), transparent);
+            opacity: 0;
+            transition: opacity .3s;
+            display: flex;
+            align-items: flex-end;
+            padding: 12px;
+        }
+        .galeria-item:hover .gi-overlay { opacity: 1; }
+        .galeria-item .gi-overlay span {
+            font-size: 12px;
+            font-weight: 600;
+            color: #fff;
+            letter-spacing: 1px;
+        }
+
+        /* Lightbox */
+        .lightbox {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background: rgba(0,0,0,0.92);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            cursor: pointer;
+        }
+        .lightbox.open { display: flex; }
+        .lightbox img {
+            max-width: 90vw;
+            max-height: 85vh;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+            object-fit: contain;
+        }
+        .lightbox .lb-close {
+            position: absolute;
+            top: 20px;
+            right: 24px;
+            color: rgba(255,255,255,0.4);
+            font-size: 28px;
+            cursor: pointer;
+            transition: color .2s;
+            background: none;
+            border: none;
+            font-family: 'Rajdhani', sans-serif;
+        }
+        .lightbox .lb-close:hover { color: #fff; }
+
+        /* ============================================
+           CALENDÁRIO & LOJA
+           ============================================ */
+        #acesso {
+            background: radial-gradient(ellipse at 50% 50%, rgba(34,197,94,0.02) 0%, transparent 60%);
+        }
+        .acesso-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        .acesso-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius);
+            padding: clamp(30px, 5vw, 40px);
+            text-align: center;
+            transition: all .35s ease;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            position: relative;
+            overflow: hidden;
+        }
+        .acesso-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(34,197,94,0.04), transparent);
+            opacity: 0;
+            transition: opacity .35s;
+        }
+        .acesso-card:hover {
+            transform: translateY(-6px);
+            border-color: rgba(34,197,94,0.3);
+            box-shadow: 0 12px 40px rgba(34,197,94,0.1);
+        }
+        .acesso-card:hover::before { opacity: 1; }
+        .acesso-card .ac-icon {
+            font-size: 42px;
+            margin-bottom: 16px;
+            display: block;
+        }
+        .acesso-card h3 {
+            font-family: 'Orbitron', monospace;
+            font-size: clamp(18px, 3vw, 22px);
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+        .acesso-card h3 span { color: var(--green); }
+        .acesso-card p {
+            font-size: 14px;
+            color: var(--sand-dark);
+            line-height: 1.6;
+        }
+        .acesso-card .ac-arrow {
+            display: inline-block;
+            margin-top: 16px;
+            color: var(--green);
+            font-family: 'Orbitron', monospace;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            transition: gap .3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .acesso-card:hover .ac-arrow { gap: 12px; }
+
+        /* ============================================
+           EVENTOS
+           ============================================ */
+        #eventos { background: radial-gradient(ellipse at 70% 50%, rgba(34,197,94,0.02) 0%, transparent 60%); }
+        .eventos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+            gap: 20px;
+        }
+        .evento-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            transition: all .35s ease;
+        }
+        .evento-card:hover {
+            border-color: rgba(34,197,94,0.3);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 30px rgba(34,197,94,0.08);
+        }
+        .evento-card .ec-data {
+            font-family: 'Orbitron', monospace;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--green);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        .evento-card h3 {
+            font-family: 'Orbitron', monospace;
+            font-size: 17px;
+            font-weight: 700;
+            color: #fff;
+        }
+        .evento-card p {
+            font-size: 14px;
+            color: var(--sand-dark);
+            line-height: 1.5;
+            flex: 1;
+        }
+        .evento-card .ec-tag {
+            align-self: flex-start;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            background: var(--green-glass);
+            color: var(--green);
+        }
+        .evento-placeholder {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--sand-dark);
+        }
+        .evento-placeholder .ep-icon { font-size: 40px; margin-bottom: 12px; opacity: 0.3; }
+        .evento-placeholder p { font-size: 15px; }
+
+        /* ============================================
+           CONTATOS
+           ============================================ */
+        #contatos {
+            background:
+                radial-gradient(ellipse at 50% 0%, rgba(34,197,94,0.03) 0%, transparent 60%);
+        }
+        .contatos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr));
+            gap: 16px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .contato-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius);
+            padding: 24px 20px;
+            text-align: center;
+            transition: all .35s ease;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+        .contato-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(34,197,94,0.3);
+            box-shadow: 0 8px 30px rgba(34,197,94,0.08);
+        }
+        .contato-card .cc-icon {
+            font-size: 32px;
+            margin-bottom: 8px;
+            display: block;
+        }
+        .contato-card h3 {
+            font-family: 'Orbitron', monospace;
+            font-size: 15px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 4px;
+        }
+        .contato-card p {
+            font-size: 13px;
+            color: var(--sand-dark);
+        }
+        .contato-card .cc-handle {
+            font-size: 14px;
+            color: var(--green);
+            font-weight: 600;
+            margin-top: 4px;
+        }
+        .contato-whatsapp .cc-icon { color: #25D366; }
+        .contato-instagram .cc-icon { color: #E1306C; }
+        .contato-facebook .cc-icon { color: #1877F2; }
+
+        /* ============================================
+           COMPARTILHAR
+           ============================================ */
+        .endereco-box {
+            margin-top: 30px;
+            text-align: center;
+            padding: 24px;
+            background: var(--glass-bg-2);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-sm);
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .endereco-box .eb-icon { font-size: 24px; margin-bottom: 6px; }
+        .endereco-box p { font-size: 14px; color: var(--sand-dark); }
+        .endereco-box strong { color: var(--sand); }
+        .endereco-box .eb-actions {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+        .endereco-box .eb-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all .25s;
+            text-decoration: none;
+            font-family: 'Rajdhani', sans-serif;
+            border: 1px solid var(--glass-border);
+            background: var(--glass-bg);
+            color: var(--sand);
+        }
+        .endereco-box .eb-btn:hover {
+            border-color: var(--green);
+            background: var(--green-glass);
+            color: var(--green);
+            transform: translateY(-2px);
+        }
+        .endereco-box .eb-btn.eb-maps {
+            background: rgba(34,197,94,0.1);
+            border-color: rgba(34,197,94,0.2);
+            color: var(--green);
+        }
+        .endereco-box .eb-btn.eb-maps:hover {
+            background: var(--green);
+            color: #fff;
+        }
+
+        /* ============================================
+           FOOTER
+           ============================================ */
+        footer {
+            padding: 40px 20px 24px;
+            border-top: 1px solid var(--glass-border);
+            text-align: center;
+        }
+        footer .footer-logo {
+            font-family: 'Special Elite', 'Orbitron', monospace;
+            font-size: 18px;
+            color: var(--green);
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+        }
+        footer .footer-logo span { color: var(--sand); }
+        footer .footer-links {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+        }
+        footer .footer-links a {
+            color: var(--sand-dark);
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+            transition: color .25s;
+        }
+        footer .footer-links a:hover { color: var(--green); }
+        footer .footer-copy {
+            font-size: 12px;
+            color: rgba(255,255,255,0.15);
+            letter-spacing: 2px;
+        }
+
+        /* ============================================
+           RESPONSIVO
+           ============================================ */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 60px;
+                left: 0;
+                right: 0;
+                background: rgba(10,10,10,0.95);
+                backdrop-filter: blur(20px);
+                flex-direction: column;
+                padding: 12px 16px;
+                border-bottom: 1px solid var(--glass-border);
+                gap: 4px;
+            }
+            .nav-links.open { display: flex; }
+            .nav-links a { padding: 10px 14px; font-size: 14px; }
+            .nav-toggle { display: block; }
+
+            .historia-grid { grid-template-columns: 1fr; }
+            .airsoft-grid { grid-template-columns: 1fr; }
+            .airsoft-fatos { grid-template-columns: 1fr 1fr; }
+            .acesso-grid { grid-template-columns: 1fr; }
+
+            .timeline { flex-direction: column; }
+            .timeline-item { min-width: 100%; }
+
+            .hero-actions { flex-direction: column; align-items: center; }
+            .btn-primary, .btn-secondary { width: 100%; justify-content: center; }
+        }
+
+        @media (max-width: 480px) {
+            section { padding: 40px 0; }
+            .container { padding: 0 16px; }
+            .hero-badges { flex-direction: column; align-items: center; gap: 6px; }
+            .airsoft-fatos { grid-template-columns: 1fr; }
+            .galeria-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== NAVBAR ===== -->
+    <nav class="navbar" id="navbar">
+        <a href="#hero" class="navbar-brand">
+            <span class="icon">⚔️</span>
+            ARENA <span>SQUAD</span>
+        </a>
+        <button class="nav-toggle" onclick="toggleNav()" aria-label="Menu">☰</button>
+        <ul class="nav-links" id="navLinks">
+            <a href="#historia" onclick="closeNav()">História</a>
+            <a href="#valores" onclick="closeNav()">Valores</a>
+            <a href="#airsoft" onclick="closeNav()">Airsoft</a>
+            <a href="#espaco" onclick="closeNav()">Espaço</a>
+            <a href="#acesso" onclick="closeNav()">Agendar</a>
+            <a href="#contatos" onclick="closeNav()">Contato</a>
+        </ul>
+    </nav>
+
+    <!-- ===== HERO ===== -->
+    <section id="hero">
+        <div class="hero-bg"></div>
+        <div class="hero-overlay"></div>
+        <div class="hero-crosshair"></div>
+        <div class="hero-corner tl"></div>
+        <div class="hero-corner tr"></div>
+        <div class="hero-corner bl"></div>
+        <div class="hero-corner br"></div>
+
+        <div class="hero-content">
+            <div class="hero-logo-wrapper">
+                <img src="Logo verde.jpeg" alt="Arena Squad" class="hero-logo" />
+            </div>
+            <h1 class="hero-title"><span class="arena">ARENA</span> <span class="squad">SQUAD</span></h1>
+            <p class="hero-sub">◆ VILA NOVA ◆</p>
+            <div class="hero-badges">
+                <span>Airsoft</span>
+                <span>Aventura</span>
+                <span>Comunidade</span>
+            </div>
+            <div class="hero-actions">
+                <a href="app.html" class="btn-primary">◆ ENTRAR</a>
+                <a href="app.html" class="btn-secondary">◈ AGENDAR</a>
+            </div>
+        </div>
+
+        <a class="hero-scroll-hint" href="#historia">▼ Role para conhecer a Arena</a>
+        <div class="hero-scrim"></div>
+    </section>
+
+    <!-- ===== HISTÓRIA ===== -->
+    <section id="historia">
+        <div class="container">
+            <div class="section-header reveal">
+                <span class="section-tag">Nossa Trajetória</span>
+                <h2 class="section-title">Nossa <span>História</span></h2>
+                <p class="section-desc">Como surgiu a Arena Squad e a paixão pelo Airsoft em Vila Nova</p>
+            </div>
+            <div class="historia-grid">
+                <div class="historia-texto reveal">
+                    <p>
+                        A <strong>Arena Squad</strong> nasceu da paixão de um grupo de amigos pelo Airsoft.
+                        O que começou como encontros de fim de semana em terrenos baldios e matas
+                        próximas a Vila Nova, rapidamente se transformou em um sonho maior:
+                        <strong>criar um espaço próprio</strong> onde a comunidade pudesse vivenciar
+                        o esporte com segurança, estrutura e, acima de tudo, <strong>respeito</strong>.
+                    </p>
+                    <p>
+                        Após meses de planejamento, mutirões e muita determinação, a Arena Squad
+                        abriu suas portas. Hoje somos referência na região, recebendo desde
+                        iniciantes curiosos até veteranos experientes, sempre com o mesmo
+                        espírito de <strong>camaradagem e superação</strong> que nos trouxe até aqui.
+                    </p>
+                    <p>
+                        Mais que um campo de jogos, a Arena Squad é um ponto de encontro —
+                        um lugar onde <strong>estratégia, disciplina e diversão</strong> se encontram
+                        para criar experiências inesquecíveis.
+                    </p>
+                </div>
+                <div class="historia-imagem reveal">
+                    <img src="Logo realista.jpeg" alt="Arena Squad - Nossa História" />
+                </div>
+            </div>
+            <div class="timeline reveal">
+                <div class="timeline-item">
+                    <div class="tl-ano">2023</div>
+                    <div class="tl-texto">Primeiros encontros e a ideia da Arena começa a ganhar forma</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="tl-ano">2024</div>
+                    <div class="tl-texto">Estruturação do espaço e formação da comunidade</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="tl-ano">2025</div>
+                    <div class="tl-texto">Inauguração oficial e primeiros eventos abertos</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="tl-ano">2026</div>
+                    <div class="tl-texto">Sistema de reservas online, loja e crescimento contínuo</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== VALORES ===== -->
+    <section id="valores">
+        <div class="container">
+            <div class="section-header reveal">
+                <span class="section-tag">Nossos Pilares</span>
+                <h2 class="section-title">Valores do <span>Esporte</span></h2>
+                <p class="section-desc">O que o Airsoft representa para a Arena Squad</p>
+            </div>
+            <div class="valores-grid">
+                <div class="valor-card reveal">
+                    <span class="vc-icon">🎯</span>
+                    <h3><span>Disciplina</span></h3>
+                    <p>No Airsoft, cada movimento importa. A disciplina ensina controle, paciência e respeito às regras — valores que levamos para dentro e fora do campo.</p>
+                </div>
+                <div class="valor-card reveal">
+                    <span class="vc-icon">🤝</span>
+                    <h3><span>Respeito</span></h3>
+                    <p>Respeito ao adversário, às regras do jogo e ao próximo. Aqui não há inimigos, apenas competidores que se ajudam a evoluir.</p>
+                </div>
+                <div class="valor-card reveal">
+                    <span class="vc-icon">⚡</span>
+                    <h3><span>Trabalho em Equipe</span></h3>
+                    <p>Nenhum soldado vence sozinho. A comunicação e a confiança no grupo são a chave para o sucesso — dentro do jogo e na vida.</p>
+                </div>
+                <div class="valor-card reveal">
+                    <span class="vc-icon">🏆</span>
+                    <h3><span>Superação</span></h3>
+                    <p>Cada partida é um desafio novo. Superar seus limites, aprender com as derrotas e celebrar as vitórias com humildade.</p>
+                </div>
+                <div class="valor-card reveal">
+                    <span class="vc-icon">🔰</span>
+                    <h3><span>Honra</span></h3>
+                    <p>Jogar com honra é reconhecer quando foi atingido, cumprir os acordos e manter a palavra. A integridade é a marca de um verdadeiro jogador.</p>
+                </div>
+                <div class="valor-card reveal">
+                    <span class="vc-icon">🌱</span>
+                    <h3><span>Comunidade</span></h3>
+                    <p>Acreditamos que o Airsoft forma comunidades fortes. Aqui todos são bem-vindos — veteranos, iniciantes, famílias. O esporte une.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== AIRSOFT ===== -->
+    <section id="airsoft">
+        <div class="container">
+            <div class="section-header reveal">
+                <span class="section-tag">Para Quem Não Conhece</span>
+                <h2 class="section-title">O que é <span>Airsoft?</span></h2>
+                <p class="section-desc">Descubra um esporte que vai muito além do tiro ao alvo</p>
+            </div>
+            <div class="airsoft-grid">
+                <div class="airsoft-texto reveal">
+                    <p>
+                        <strong>Airsoft</strong> é um esporte de simulação tática onde os participantes
+                        utilizam réplicas de armas reais que disparam <strong>projéteis de plástico</strong>
+                        (chamados de BBs) de 6mm, impulsionados por gás, mola ou eletricidade.
+                    </p>
+                    <p>
+                        Diferente do que muitos pensam, o Airsoft <strong>não é violento</strong> — é um
+                        esporte baseado em <strong>honra, estratégia e trabalho em equipe</strong>.
+                        Quando um jogador é atingido, ele mesmo se declara eliminado e levanta a mão.
+                        Não há juízes — o <strong>código de conduta</strong> é o que mantém o jogo justo.
+                    </p>
+                    <p>
+                        Os jogos simulam cenários como <strong>missões de resgate, captura de bandeira,
+                        defesa de base</strong> e muito mais. Cada partida é uma experiência única,
+                        combinando <strong>preparação física, raciocínio rápido e espírito de equipe</strong>.
+                    </p>
+                    <p>
+                        <strong>Segurança é prioridade:</strong> uso obrigatório de óculos de proteção,
+                        limites de potência nas réplicas e regras claras para todos os participantes.
+                    </p>
+                </div>
+                <div class="airsoft-fatos reveal">
+                    <div class="fato-item">
+                        <div class="fi-num">6mm</div>
+                        <div class="fi-label">Calibre dos projéteis (BBs)</div>
+                    </div>
+                    <div class="fato-item">
+                        <div class="fi-num">100%</div>
+                        <div class="fi-label">Baseado em honra e respeito</div>
+                    </div>
+                    <div class="fato-item">
+                        <div class="fi-num">+10</div>
+                        <div class="fi-label">Cenários de jogo diferentes</div>
+                    </div>
+                    <div class="fato-item">
+                        <div class="fi-num">◆</div>
+                        <div class="fi-label">Equipamento de segurança obrigatório</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== ESPAÇO ===== -->
+    <section id="espaco">
+        <div class="container">
+            <div class="section-header reveal">
+                <span class="section-tag">Conheça o Local</span>
+                <h2 class="section-title">Nosso <span>Espaço</span></h2>
+                <p class="section-desc">Estrutura preparada para proporcionar a melhor experiência</p>
+            </div>
+            <p class="espaco-texto reveal">
+                A Arena Squad conta com um campo especialmente projetado para partidas de Airsoft,
+                com <strong>obstáculos, coberturas e cenários</strong> que tornam cada jogo imersivo
+                e emocionante. Área de convivência, estacionamento e toda a estrutura para você
+                e seu time viverem o esporte ao máximo.
+            </p>
+            <div class="galeria-grid" id="galeriaGrid">
+                <div class="galeria-item reveal" onclick="openLightbox('Logo realista.jpeg')">
+                    <img src="Logo realista.jpeg" alt="Arena Squad - Vista Geral" loading="lazy" />
+                    <div class="gi-overlay"><span>🔍 Ampliar</span></div>
+                </div>
+                <div class="galeria-item reveal" onclick="openLightbox('Logo verde.jpeg')">
+                    <img src="Logo verde.jpeg" alt="Arena Squad - Logo" loading="lazy" />
+                    <div class="gi-overlay"><span>🔍 Ampliar</span></div>
+                </div>
+                <div class="galeria-item reveal" onclick="openLightbox('Logo calendario.jpeg')">
+                    <img src="Logo calendario.jpeg" alt="Arena Squad - Calendário" loading="lazy" />
+                    <div class="gi-overlay"><span>🔍 Ampliar</span></div>
+                </div>
+                <div class="galeria-item reveal" onclick="openLightbox('XX3.png')">
+                    <img src="XX3.png" alt="Arena Squad - Jogo" loading="lazy" />
+                    <div class="gi-overlay"><span>🔍 Ampliar</span></div>
+                </div>
+                <div class="galeria-item reveal" onclick="openLightbox('XXX.png')">
+                    <img src="XXX.png" alt="Arena Squad - Ação" loading="lazy" />
+                    <div class="gi-overlay"><span>🔍 Ampliar</span></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== ACESSO RÁPIDO ===== -->
+    <section id="acesso">
+        <div class="container">
+            <div class="section-header reveal">
+                <span class="section-tag">Acesso Rápido</span>
+                <h2 class="section-title">Calendário & <span>Loja</span></h2>
+                <p class="section-desc">Reserve seu horário ou confira nossos produtos</p>
+            </div>
+            <div class="acesso-grid">
+                <a href="app.html" class="acesso-card reveal">
+                    <span class="ac-icon">📅</span>
+                    <h3><span>Agendar</span> Jogo</h3>
+                    <p>Veja a disponibilidade e reserve seu horário. Partidas de Airsoft com diversos cenários e formatos.</p>
+                    <span class="ac-arrow">ACESSAR →</span>
+                </a>
+                <a href="app.html" class="acesso-card reveal">
+                    <span class="ac-icon">🛒</span>
+                    <h3><span>Nossa</span> Loja</h3>
+                    <p>Equipamentos, munição, acessórios e muito mais. Tudo que você precisa para o jogo.</p>
+                    <span class="ac-arrow">ACESSAR →</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== EVENTOS ===== -->
+    <section id="eventos">
+        <div class="container">
+            <div class="section-header reveal">
+                <span class="section-tag">Fique Ligado</span>
+                <h2 class="section-title">Próximos <span>Eventos</span></h2>
+                <p class="section-desc">Acompanhe as datas especiais e torneios na Arena</p>
+            </div>
+            <div class="eventos-grid" id="eventosGrid">
+                <!-- Eventos serão inseridos via JS / placeholder -->
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== CONTATOS ===== -->
+    <section id="contatos">
+        <div class="container">
+            <div class="section-header reveal">
+                <span class="section-tag">Fale Conosco</span>
+                <h2 class="section-title">Nossos <span>Contatos</span></h2>
+                <p class="section-desc">Acompanhe a Arena Squad nas redes sociais e entre em contato</p>
+            </div>
+            <div class="contatos-grid reveal">
+                <a href="https://instagram.com" target="_blank" rel="noopener" class="contato-card contato-instagram">
+                    <span class="cc-icon">📸</span>
+                    <h3>Instagram</h3>
+                    <p>Acompanhe os melhores momentos</p>
+                    <div class="cc-handle">@arena.squad</div>
+                </a>
+                <a href="https://facebook.com" target="_blank" rel="noopener" class="contato-card contato-facebook">
+                    <span class="cc-icon">📘</span>
+                    <h3>Facebook</h3>
+                    <p>Eventos e novidades</p>
+                    <div class="cc-handle">/ArenaSquad</div>
+                </a>
+                <a href="https://wa.me/5547999999999" target="_blank" rel="noopener" class="contato-card contato-whatsapp">
+                    <span class="cc-icon">💬</span>
+                    <h3>WhatsApp</h3>
+                    <p>Reservas e informações</p>
+                    <div class="cc-handle">(47) 99999-9999</div>
+                </a>
+            </div>
+<div class="endereco-box reveal">
+                <div class="eb-icon">📍</div>
+                <p><strong>Arena Squad</strong> — Vila Nova, Joinville</p>
+                <p style="font-size:13px;color:var(--sand-dark);margin-top:4px;">Rodovia do Arroz, 3510 — Fundos, Vila Nova<br>Joinville · SC · CEP 89200-000</p>
+                <div class="eb-actions">
+                    <button class="eb-btn" onclick="copiarEndereco()">📋 Copiar Endereço</button>
+                    <a href="https://maps.google.com/?q=Rodovia+do+Arroz+3510+Fundos+Vila+Nova+Joinville+SC" target="_blank" rel="noopener" class="eb-btn eb-maps">🗺️ Abrir no Maps</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== FOOTER ===== -->
+    <footer>
+        <div class="footer-logo">ARENA <span>SQUAD</span></div>
+        <div class="footer-links">
+            <a href="#historia">História</a>
+            <a href="#valores">Valores</a>
+            <a href="#airsoft">Airsoft</a>
+            <a href="#espaco">Espaço</a>
+            <a href="#acesso">Agendar</a>
+            <a href="#contatos">Contato</a>
+        </div>
+        <div class="footer-copy">© 2026 Arena Squad — Vila Nova. Todos os direitos reservados.</div>
+    </footer>
+
+    <!-- ===== LIGHTBOX ===== -->
+    <div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
+        <button class="lb-close" onclick="closeLightbox()">✕</button>
+        <img id="lightboxImg" src="" alt="Ampliar" />
+    </div>
+
+    <script>
+        // ============================================
+        // NAVEGAÇÃO
+        // ============================================
+        function toggleNav() {
+            document.getElementById('navLinks').classList.toggle('open');
+        }
+        function closeNav() {
+            document.getElementById('navLinks').classList.remove('open');
+        }
+
+        // Navbar aparece ao scroll
+        const navbar = document.getElementById('navbar');
+        let navShown = false;
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > window.innerHeight * 0.7) {
+                if (!navShown) { navbar.classList.add('show'); navShown = true; }
+            } else {
+                if (navShown) { navbar.classList.remove('show'); navShown = false; }
+            }
+        });
+
+        // ============================================
+        // SCROLL REVEAL (Intersection Observer)
+        // ============================================
+        const revealObserver = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    revealObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+
+        document.querySelectorAll('.reveal').forEach(function(el) {
+            revealObserver.observe(el);
+        });
+
+        // ============================================
+        // LIGHTBOX
+        // ============================================
+        function openLightbox(src) {
+            document.getElementById('lightboxImg').src = src;
+            document.getElementById('lightbox').classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeLightbox(e) {
+            if (e && e.target !== e.currentTarget) return;
+            document.getElementById('lightbox').classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        // ============================================
+        // COPIAR ENDEREÇO
+        // ============================================
+        function copiarEndereco() {
+            var endereco = 'Arena Squad — Rodovia do Arroz, 3510 — Fundos, Vila Nova, Joinville — SC, CEP 89200-000';
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(endereco).then(function() {
+                    var btn = event.target;
+                    var original = btn.textContent;
+                    btn.textContent = '✅ Copiado!';
+                    setTimeout(function() { btn.textContent = original; }, 2000);
+                }).catch(function() {
+                    fallbackCopiar(endereco);
+                });
+            } else {
+                fallbackCopiar(endereco);
+            }
+        }
+        function fallbackCopiar(texto) {
+            var ta = document.createElement('textarea');
+            ta.value = texto;
+            ta.style.position = 'fixed';
+            ta.style.left = '-9999px';
+            document.body.appendChild(ta);
+            ta.select();
+            document.execCommand('copy');
+            document.body.removeChild(ta);
+            var btn = event && event.target;
+            if (btn) {
+                var original = btn.textContent;
+                btn.textContent = '✅ Copiado!';
+                setTimeout(function() { btn.textContent = original; }, 2000);
+            }
+        }
+
+        // ============================================
+        // EVENTOS — Placeholder / dados mockados
+        // ============================================
+        (function() {
+            var grid = document.getElementById('eventosGrid');
+            if (!grid) return;
+
+            // Na primeira versão, mostra placeholder — no futuro pode ser
+            // alimentado por uma API ou um JSON estático
+            var temEventos = false; // mudar para true quando houver eventos
+
+            if (!temEventos) {
+                grid.innerHTML = '<div class="evento-placeholder">' +
+                    '<div class="ep-icon">📢</div>' +
+                    '<p><strong>Em breve!</strong> Estamos preparando novos eventos.</p>' +
+                    '<p style="margin-top:6px;font-size:13px;">Acompanhe nossas redes sociais para ficar por dentro.</p>' +
+                    '</div>';
+            }
+        })();
+    </script>
+</body>
+</html>
