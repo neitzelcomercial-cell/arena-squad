@@ -1137,16 +1137,14 @@ body {font-family:'Rajdhani',sans-serif;background:var(--dark);color:#e0e0e0;min
     mb.textContent = '◆ Migrar dados';
     mb.style.cssText = 'position:fixed;bottom:34px;right:12px;z-index:9999;padding:6px 14px;border-radius:8px;font-size:11px;font-weight:700;font-family:Rajdhani,sans-serif;background:linear-gradient(135deg,#166534,#22c55e);color:#fff;border:none;cursor:pointer;display:none;text-transform:uppercase;letter-spacing:1px;box-shadow:0 0 10px rgba(34,197,94,0.3)';
     mb.onclick = function() {
-      toast('⏳ Migrando dados... Aguarde.');
+      
       // Tenta migrar
       if (typeof migrarDadosLocais !== 'function') {
-        toast('❌ Erro: migracao.js nao carregou. Tente pelo console: migrar()');
         return;
       }
       migrarDadosLocais().then(function() {
-        toast('✅ Dados migrados com sucesso!');
+        
       }).catch(function(e) {
-        toast('❌ Erro na migracao: ' + (e.message || 'desconhecido'));
       });
     };
     document.body.appendChild(mb);
@@ -1163,7 +1161,7 @@ body {font-family:'Rajdhani',sans-serif;background:var(--dark);color:#e0e0e0;min
             load();
             if (state.panelDay !== null) openPanel(state.panelDay, state.panelMonth);
             render();
-            toast("Sincronizado!");
+            
           }
         },
         onPedidosChanged: function(vemDeFora) {
@@ -1207,14 +1205,14 @@ body {font-family:'Rajdhani',sans-serif;background:var(--dark);color:#e0e0e0;min
         }
         // Migra dados locais automaticamente se tiver dados no localStorage
         setTimeout(function() {
-          if (typeof migrarDadosLocais === 'function') {
+          if (false) {
             // So migra se tiver dados locais que ainda nao estao no servidor
             var reservasLocais = JSON.parse(localStorage.getItem('proarena_reservas') || '{}');
             if (reservasLocais.reservas && Object.keys(reservasLocais.reservas).length > 0) {
               console.log('[AUTO] Dados locais encontrados, migrando automaticamente...');
-              toast('⏳ Sincronizando dados...');
+              
               migrarDadosLocais().then(function() {
-                toast('✅ Dados sincronizados!');
+                
               }).catch(function() {
                 console.log('[AUTO] Migracao automatica nao necessaria ou falhou');
               });
@@ -1265,7 +1263,8 @@ body {font-family:'Rajdhani',sans-serif;background:var(--dark);color:#e0e0e0;min
   </div>
   <div id="adminContent" style="display:none;flex-direction:column;flex:1;min-height:0;">
     <div class="admin-tabs">
-      <button class="admin-tab active" data-tab="estoque" onclick="mudaTab('estoque')">◆ Estoque</button>
+      <button class="admin-tab active" data-tab="dashboard" onclick="mudaTab('dashboard')">◆ Dashboard</button>
+      <button class="admin-tab" data-tab="estoque" onclick="mudaTab('estoque')">◆ Estoque</button>
       <button class="admin-tab" data-tab="pedidos" onclick="mudaTab('pedidos')">◆ Pedidos</button>
       <button class="admin-tab" data-tab="jogos" onclick="mudaTab('jogos')">◆ Jogos</button>
       <button class="admin-tab" data-tab="config" onclick="mudaTab('config')">⚙️ Pix</button>
@@ -1712,7 +1711,7 @@ function openAdmin() {
   document.getElementById('adminOverlay').classList.add('open');
   document.getElementById('adminModal').classList.add('open');
   if (!logado) { document.getElementById('adminLogin').style.display = 'block'; document.getElementById('adminContent').style.display = 'none'; }
-  else { document.getElementById('adminLogin').style.display = 'none'; document.getElementById('adminContent').style.display = 'flex'; mudaTab('estoque'); }
+  else { document.getElementById('adminLogin').style.display = 'none'; document.getElementById('adminContent').style.display = 'flex'; mudaTab('dashboard'); }
 }
 function closeAdmin() { document.getElementById('adminOverlay').classList.remove('open'); document.getElementById('adminModal').classList.remove('open'); }
 function adminAuth() {
@@ -1725,7 +1724,7 @@ function adminAuth() {
     document.getElementById('adminErr').style.display = 'none';
     document.getElementById('adminLogin').style.display = 'none';
     document.getElementById('adminContent').style.display = 'flex';
-    mudaTab('estoque');
+    mudaTab('dashboard');
     document.getElementById('adminPass').value = '';
     document.getElementById('adminName').value = '';
     toast('🔓 Bem-vindo, ' + n + '!');
@@ -1741,7 +1740,20 @@ function mudaTab(t) {
 }
 function renderAdmin(t) {
   var b = document.getElementById('adminBody');
-  if (t === 'estoque') {
+    if (t === 'dashboard') {
+    var totalEst = FISICOS.length;
+    var baixoEst = FISICOS.filter(function(p) { return getEst(p.id) <= 3; }).length;
+    var totalPed = getPedidos().length;
+    var totalJog = Object.keys(reservaSlots).length;
+    var pixAtual = localStorage.getItem('arenaPix') || '00.000.000/0001-00';
+    b.innerHTML = '<div style="padding:4px 0">' +
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">' +
+      '<div style="background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:var(--radius-sm);padding:16px;text-align:center"><div style="font-size:28px;margin-bottom:4px">📦</div><div style="font-size:22px;font-weight:700;color:var(--green-light)">' + totalEst + '</div><div style="font-size:11px;color:var(--sand-dark)">Produtos</div><div style="font-size:10px;color:' + (baixoEst > 0 ? '#ef4444' : 'var(--sand-dark)') + '">' + baixoEst + ' com estoque baixo</div></div>' +
+      '<div style="background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:var(--radius-sm);padding:16px;text-align:center"><div style="font-size:28px;margin-bottom:4px">🛒</div><div style="font-size:22px;font-weight:700;color:var(--green-light)">' + totalPed + '</div><div style="font-size:11px;color:var(--sand-dark)">Pedidos</div></div>' +
+      '<div style="background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:var(--radius-sm);padding:16px;text-align:center"><div style="font-size:28px;margin-bottom:4px">🎯</div><div style="font-size:22px;font-weight:700;color:var(--green-light)">' + totalJog + '</div><div style="font-size:11px;color:var(--sand-dark)">Jogos</div></div>' +
+      '<div style="background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:var(--radius-sm);padding:16px;text-align:center;overflow:hidden"><div style="font-size:28px;margin-bottom:4px">💰</div><div style="font-size:13px;font-weight:700;color:var(--green-light);word-break:break-all;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + pixAtual + '</div><div style="font-size:11px;color:var(--sand-dark)">Chave PIX</div></div>' +
+      '</div><div style="text-align:center;margin-top:6px"><span style="font-size:11px;color:var(--sand-dark)">◆ Clique nas abas acima para gerenciar</span></div>';
+  } else if (t === 'estoque') {
     b.innerHTML = '<div style="margin-bottom:10px;display:flex;gap:6px"><button onclick="adicionarProduto()" style="flex:1;padding:8px;background:var(--green);color:#fff;border:none;border-radius:var(--radius-xs);cursor:pointer;font-weight:700;font-family:Rajdhani,sans-serif;font-size:12px">➕ Novo Produto</button></div>' +
     FISICOS.map(function(p, idx) {
       var d = getEst(p.id);
