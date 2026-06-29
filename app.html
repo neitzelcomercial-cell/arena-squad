@@ -48,109 +48,7 @@
             pointer-events: none;
             opacity: 0.6;
         }
-        #splash {
-            position: fixed; inset: 0; z-index: 9999;
-            display: flex; flex-direction: column;
-            align-items: center; justify-content: center;
-            transition: opacity .7s ease, visibility .7s ease;
-            background: var(--dark);
-            overflow: hidden;
-        }
-        #splash.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
-        #splash .splash-bg {
-            position: absolute; inset: 0;
-            background-image: url('Logo realista.jpeg');
-            background-size: cover; background-position: center;
-            filter: blur(2px) brightness(0.45);
-            animation: splashZoom 16s ease-in-out infinite alternate;
-            transform: scale(1.05);
-        }
-        @keyframes splashZoom {
-            0% { transform: scale(1.05); }
-            100% { transform: scale(1.15); }
-        }
-        #splash .splash-overlay {
-            position: absolute; inset: 0;
-            background: linear-gradient(180deg, rgba(0,0,0,0.5), rgba(0,0,0,0.25), rgba(0,0,0,0.6));
-        }
-        #splash::after {
-            content: '';
-            position: absolute; inset: 0; z-index: 1;
-            background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px),
-                        radial-gradient(circle at 50% 50%, transparent 40%, rgba(0,0,0,0.3) 100%);
-            pointer-events: none;
-        }
-        .splash-crosshair {
-            position: absolute; z-index: 2; pointer-events: none; opacity: 0.08;
-        }
-        .splash-crosshair::before {
-            content: ''; position: absolute; width: 60px; height: 1px;
-            top: 50%; left: 50%; transform: translate(-50%, -50%);
-            background: var(--green);
-            box-shadow: -80px 0 0 var(--green), 80px 0 0 var(--green);
-        }
-        .splash-crosshair::after {
-            content: ''; position: absolute; width: 1px; height: 60px;
-            top: 50%; left: 50%; transform: translate(-50%, -50%);
-            background: var(--green);
-            box-shadow: 0 -80px 0 var(--green), 0 80px 0 var(--green);
-        }
-        .splash-corner { position: absolute; z-index: 2; pointer-events: none; opacity: 0.12; }
-        .splash-corner.tl { top: 20px; left: 20px; border-top: 2px solid var(--green); border-left: 2px solid var(--green); width: 40px; height: 40px; }
-        .splash-corner.tr { top: 20px; right: 20px; border-top: 2px solid var(--green); border-right: 2px solid var(--green); width: 40px; height: 40px; }
-        .splash-corner.bl { bottom: 20px; left: 20px; border-bottom: 2px solid var(--green); border-left: 2px solid var(--green); width: 40px; height: 40px; }
-        .splash-corner.br { bottom: 20px; right: 20px; border-bottom: 2px solid var(--green); border-right: 2px solid var(--green); width: 40px; height: 40px; }
-        .splash-content { position: relative; z-index: 3; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; width: 100%; max-width: 520px; }
-        @keyframes logoPulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.03); } }
-        .splash-content .splash-img-wrapper {
-            position: relative; display: inline-flex; margin-bottom: 8px;
-        }
-        .splash-content .splash-img-wrapper::before {
-            content: ''; position: absolute; inset: -10px;
-            background: radial-gradient(circle, rgba(34,197,94,0.15) 0%, transparent 70%);
-            border-radius: 50%; animation: splashGlow 3s ease-in-out infinite;
-        }
-        @keyframes splashGlow { 0%,100%{opacity:.6;transform:scale(1)} 50%{opacity:1;transform:scale(1.08)} }
-        .splash-content h1 {
-            font-family: 'Special Elite', 'Orbitron', monospace;
-            font-size: clamp(28px, 7vw, 52px);
-            font-weight: 400;
-            letter-spacing: 3px;
-            text-shadow: 0 2px 30px rgba(0,0,0,0.5);
-            line-height: 1.2;
-        }
-        .splash-content h1 .calendario { color: var(--sand); }
-        .splash-content h1 .arena-squad { color: var(--green); }
-        .splash-content .splash-sub { color: rgba(255,255,255,0.45); font-size: clamp(13px, 3vw, 16px); letter-spacing: 3px; font-weight: 600; }
-        .splash-content .splash-reserve { color: rgba(255,255,255,0.25); font-size: clamp(12px, 2.5vw, 14px); letter-spacing: 2px; }
-        .splash-btn {
-            background: rgba(34,197,94,0.12);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(34,197,94,0.3);
-            color: var(--green);
-            padding: 16px 52px;
-            border-radius: 14px;
-            font-size: clamp(16px, 4vw, 20px);
-            font-weight: 700;
-            cursor: pointer;
-            font-family: 'Special Elite', 'Orbitron', monospace;
-            text-transform: uppercase;
-            letter-spacing: 5px;
-            transition: all .3s ease;
-            box-shadow: 0 0 20px rgba(34,197,94,0.08);
-            position: relative; overflow: hidden;
-        }
-        .splash-btn::before {
-            content: ''; position: absolute; inset: 0;
-            background: linear-gradient(135deg, rgba(34,197,94,0.1), transparent);
-            opacity: 0; transition: opacity .3s;
-        }
-        .splash-btn:hover::before { opacity: 1; }
-        .splash-btn:hover { background: rgba(34,197,94,0.2); border-color: rgba(34,197,94,0.5); box-shadow: 0 0 50px rgba(34,197,94,0.25); transform: translateY(-3px) scale(1.02); }
-        .splash-btn:active { transform: scale(.96); }
-        .splash-footer { position: absolute; bottom: 16px; z-index: 3; color: rgba(255,255,255,0.12); font-size: 11px; letter-spacing: 4px; }
-        .topbar {
+	        .topbar {
             position: sticky; top: 0; z-index: 100;
             background: rgba(10,10,10,0.82);
             backdrop-filter: blur(24px);
@@ -364,13 +262,6 @@
 
             .toast { font-size: 14px; padding: 14px 20px; border-radius: 14px; left: 8px; right: 8px; transform: none; width: auto; }
 
-            .splash-content { padding: 20px; max-width: 100%; }
-            .splash-content h1 { font-size: 26px; }
-            .splash-btn { padding: 16px 40px; font-size: 17px; letter-spacing: 4px; min-height: 52px; border-radius: 14px; }
-            .splash-content .splash-sub { font-size: 15px; }
-            .splash-content .splash-reserve { font-size: 14px; }
-            .splash-footer { font-size: 10px; }
-
             .rules-box { font-size: 14px; max-height: 200px; padding: 14px; border-radius: 12px; }
             .pix-box { padding: 20px; border-radius: 14px; }
             .pix-box .pix-title { font-size: 18px; }
@@ -478,9 +369,6 @@
             .week-row .wn { font-size: 7px; }
             .sp-time { width: 60px; }
             .sp-time .sp-hour { font-size: 12px; }
-            .splash-content h1 { font-size: 20px; }
-            .splash-btn { padding: 14px 28px; font-size: 14px; letter-spacing: 2px; }
-            .topbar-actions button { padding: 8px 10px; font-size: 11px; }
             #estilosGrid, #tipoJogoGrid { grid-template-columns: 1fr; }
             .year-header h1 { font-size: 15px; }
             .year-nav button { padding: 8px 12px; font-size: 12px; }
@@ -759,29 +647,6 @@ body {font-family:'Rajdhani',sans-serif;background:var(--dark);color:#e0e0e0;min
 
 <canvas id="matrixCanvas"></canvas>
 
-<div id="splash">
-    <div class="splash-bg"></div>
-    <div class="splash-overlay"></div>
-    <div class="splash-crosshair"></div>
-    <div class="splash-corner tl"></div>
-    <div class="splash-corner tr"></div>
-    <div class="splash-corner bl"></div>
-    <div class="splash-corner br"></div>
-    <div class="splash-content">
-        <div class="splash-img-wrapper">
-            <img src="Logo verde.jpeg" alt="Arena Squad" style="width:min(140px,35vw);height:min(140px,35vw);object-fit:contain;filter:drop-shadow(0 0 20px rgba(34,197,94,0.3));animation:logoPulse 4s ease-in-out infinite;position:relative;z-index:3;" />
-        </div>
-        <h1><span class="calendario">ARENA SQUAD</span> <span class="arena-squad">VILA NOVA</span></h1>
-        <div style="display:flex;align-items:center;gap:10px;margin:6px 0;">
-            <span style="font-family:'Special Elite',monospace;font-size:clamp(18px,5vw,28px);color:var(--sand);letter-spacing:3px;">2026</span>
-            <img src="Logo calendario.jpeg" alt="" style="width:clamp(28px,6vw,40px);height:clamp(28px,6vw,40px);object-fit:contain;opacity:0.7;" />
-        </div>
-        <p class="splash-sub">Airsoft • Reservas • Gerenciamento</p>
-        <p class="splash-reserve">Reserve seu horário aqui</p>
-        <button class="splash-btn" onclick="enterApp()">ACESSAR</button>
-    </div>
-    <div class="splash-footer">© 2026 — ARENA SQUAD</div>
-</div>
 
 <div id="calendarSection"><div class="topbar">
     <div class="topbar-brand">
@@ -1276,9 +1141,6 @@ body {font-family:'Rajdhani',sans-serif;background:var(--dark);color:#e0e0e0;min
         window.addEventListener('resize', () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; drops.length = Math.floor(canvas.width / 22); for (let i = 0; i < drops.length; i++) if (drops[i] === undefined) drops[i] = 0; });
     }
 
-    // Splash
-    function enterApp() { document.getElementById('splash').classList.add('hidden'); }
-    setTimeout(() => { const s = document.getElementById('splash'); if (s && !s.classList.contains('hidden')) enterApp(); }, 4000);
 
     document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('modalReserva').addEventListener('click', e => { if (e.target === e.currentTarget) fecharReserva(); });
@@ -1438,8 +1300,7 @@ body {font-family:'Rajdhani',sans-serif;background:var(--dark);color:#e0e0e0;min
   </div>
   <div id="adminContent" style="display:none;flex-direction:column;flex:1;min-height:0;">
     <div class="admin-tabs">
-      <button class="admin-tab active" data-tab="dashboard" onclick="mudaTab('dashboard')">◆ Dashboard</button>
-      <button class="admin-tab" data-tab="estoque" onclick="mudaTab('estoque')">◆ Estoque</button>
+      <button class="admin-tab active" data-tab="estoque" onclick="mudaTab('estoque')">◆ Estoque</button>
       <button class="admin-tab" data-tab="pedidos" onclick="mudaTab('pedidos')">◆ Pedidos</button>
       <button class="admin-tab" data-tab="jogos" onclick="mudaTab('jogos')">◆ Jogos</button>
       <button class="admin-tab" data-tab="config" onclick="mudaTab('config')">⚙️ Pix</button>
@@ -1893,7 +1754,7 @@ function openAdmin() {
   document.getElementById('adminOverlay').classList.add('open');
   document.getElementById('adminModal').classList.add('open');
   if (!logado) { document.getElementById('adminLogin').style.display = 'block'; document.getElementById('adminContent').style.display = 'none'; }
-  else { document.getElementById('adminLogin').style.display = 'none'; document.getElementById('adminContent').style.display = 'flex'; mudaTab('dashboard'); }
+  else { document.getElementById('adminLogin').style.display = 'none'; document.getElementById('adminContent').style.display = 'flex'; mudaTab('estoque'); }
 }
 function closeAdmin() { document.getElementById('adminOverlay').classList.remove('open'); document.getElementById('adminModal').classList.remove('open'); }
 function adminAuth() {
@@ -1922,29 +1783,15 @@ function mudaTab(t) {
 }
 function renderAdmin(t) {
   var b = document.getElementById('adminBody');
-    if (t === 'dashboard') {
-    var totalEst = FISICOS.length;
-    var baixoEst = FISICOS.filter(function(p) { return getEst(p.id) <= 3; }).length;
-    var totalPed = getPedidos().length;
-    var totalJog = Object.keys(reservaSlots).length;
-    var pixAtual = localStorage.getItem('arenaPix') || '00.000.000/0001-00';
-    b.innerHTML = '<div style="padding:4px 0">' +
-      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">' +
-      '<div style="background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:var(--radius-sm);padding:16px;text-align:center"><div style="font-size:28px;margin-bottom:4px">📦</div><div style="font-size:22px;font-weight:700;color:var(--green-light)">' + totalEst + '</div><div style="font-size:11px;color:var(--sand-dark)">Produtos</div><div style="font-size:10px;color:' + (baixoEst > 0 ? '#ef4444' : 'var(--sand-dark)') + '">' + baixoEst + ' com estoque baixo</div></div>' +
-      '<div style="background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:var(--radius-sm);padding:16px;text-align:center"><div style="font-size:28px;margin-bottom:4px">🛒</div><div style="font-size:22px;font-weight:700;color:var(--green-light)">' + totalPed + '</div><div style="font-size:11px;color:var(--sand-dark)">Pedidos</div></div>' +
-      '<div style="background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:var(--radius-sm);padding:16px;text-align:center"><div style="font-size:28px;margin-bottom:4px">🎯</div><div style="font-size:22px;font-weight:700;color:var(--green-light)">' + totalJog + '</div><div style="font-size:11px;color:var(--sand-dark)">Jogos</div></div>' +
-      '<div style="background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:var(--radius-sm);padding:16px;text-align:center;overflow:hidden"><div style="font-size:28px;margin-bottom:4px">💰</div><div style="font-size:13px;font-weight:700;color:var(--green-light);word-break:break-all;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + pixAtual + '</div><div style="font-size:11px;color:var(--sand-dark)">Chave PIX</div></div>' +
-      '</div><div style="text-align:center;margin-top:6px"><span style="font-size:11px;color:var(--sand-dark)">◆ Clique nas abas acima para gerenciar</span></div>';
-  } else if (t === 'estoque') {
+  if (t === 'estoque') {
     b.innerHTML = '<div style="margin-bottom:10px;display:flex;gap:6px"><button onclick="adicionarProduto()" style="flex:1;padding:8px;background:var(--green);color:#fff;border:none;border-radius:var(--radius-xs);cursor:pointer;font-weight:700;font-family:Rajdhani,sans-serif;font-size:12px">➕ Novo Produto</button></div>' +
     FISICOS.map(function(p, idx) {
       var d = getEst(p.id);
-      return '<div class="ae-item"><span class="ae-icon">' + p.ico + '</span><span class="ae-nome" onclick="editarDescricao(' + idx + ')" style="cursor:pointer">' + p.nome + '</span><span class="ae-qty" style="color:' + (d === 0 ? '#666' : d <= 3 ? 'var(--red-light)' : d <= 10 ? '#ffa726' : 'var(--green-light)') + ';">' + d + '</span><button class="ae-btn ae-menos" onclick="mexEst(\'' + p.id + '\',-1)">−</button><button class="ae-btn" onclick="mexEst(\'' + p.id + '\',1)">+</button><button class="ae-btn" onclick="editarDescricao(' + idx + ')" style="border-color:var(--green-glass);color:var(--green-light);font-size:9px">✎</button><button class="ae-btn fai-del" onclick="excluirProduto(' + idx + ')" style="margin-left:4px">◆</button></div>';
+      return '<div class="ae-item"><span class="ae-icon">' + p.ico + '</span><span class="ae-nome">' + p.nome + '</span><span class="ae-qty" style="color:' + (d === 0 ? '#666' : d <= 3 ? 'var(--red-light)' : d <= 10 ? '#ffa726' : 'var(--green-light)') + ';">' + d + '</span><button class="ae-btn ae-menos" onclick="mexEst(\'' + p.id + '\',-1)">−</button><button class="ae-btn" onclick="mexEst(\'' + p.id + '\',1)">+</button><button class="ae-btn fai-del" onclick="excluirProduto(' + idx + ')" style="margin-left:4px">◆</button></div>';
     }).join('');
     if (!FISICOS.length) b.innerHTML = '<div class="ped-empty">Nenhum</div>';
   } else if (t === 'pedidos') {
     var ped = getPedidos();
-    console.log('[DEBUG admin/pedidos] Renderizando aba pedidos. Total:', ped.length);
     if (!ped.length) { b.innerHTML = '<div class="ped-empty">◆ Nenhum pedido</div>'; return; }
     b.innerHTML = ped.map(function(x, idx) {
       var dR = new Date(x.dataRetirada + 'T12:00:00').toLocaleDateString('pt-BR');
@@ -1955,11 +1802,7 @@ function renderAdmin(t) {
     '<button onclick="limparPedidos()" style="width:100%;margin-top:10px;padding:6px;background:transparent;border:1px solid var(--red);color:var(--red-light);border-radius:var(--radius-xs);cursor:pointer;font-weight:700;font-family:Rajdhani,sans-serif;font-size:11px">◆ Limpar todos</button>';
   } else if (t === 'jogos') {
     var slots = [];
-    console.log('[DEBUG admin/jogos] reservaSlots total keys:', Object.keys(reservaSlots).length);
-    console.log('[DEBUG admin/jogos] reservaSlots keys:', JSON.stringify(Object.keys(reservaSlots)));
-    console.log('[DEBUG admin/jogos] state.events:', state.events.length, 'eventos');
     Object.keys(reservaSlots).forEach(function(k) { var r = reservaSlots[k]; if (r && r.nome) { r._key = k; slots.push(r); } });
-    console.log('[DEBUG admin/jogos] slots com nome:', slots.length);
     slots.sort(function(a,b){return (a.timestamp||0)-(b.timestamp||0)});
     var total = slots.length;
     b.innerHTML = '<div style="margin-bottom:8px;font-size:12px;color:var(--sand-dark)">◆ <strong style="color:var(--green-light)">' + total + '</strong> jogo(s) registrado(s)</div>' +
@@ -1980,47 +1823,19 @@ function renderAdmin(t) {
     '<div style="display:flex;gap:6px;margin-top:8px"><button onclick="limparJogosAntigos()" style="flex:1;padding:6px;background:transparent;border:1px solid var(--red);color:var(--red-light);border-radius:var(--radius-xs);cursor:pointer;font-weight:700;font-family:Rajdhani,sans-serif;font-size:11px">◆ Limpar passados</button>' +
     '<button onclick="exportarJogos()" style="flex:1;padding:6px;background:transparent;border:1px solid var(--green);color:var(--green-light);border-radius:var(--radius-xs);cursor:pointer;font-weight:700;font-family:Rajdhani,sans-serif;font-size:11px">📤 Exportar</button></div>';
   } else if (t === 'config') {
-    setTimeout(function() { carregarPix(); }, 50);
-    b.innerHTML = '<h4 style="font-family:Orbitron,monospace;font-size:12px;color:var(--green);margin-bottom:10px;">⚙️ Chave PIX</h4><div style="margin-bottom:10px;"><label style="font-size:11px;color:var(--sand-dark);display:block;margin-bottom:4px;">CHAVE PIX</label><input type="text" id="inpPix" style="width:100%;padding:7px 10px;background:var(--dark-3);border:1px solid var(--glass-border);border-radius:var(--radius-xs);color:#fff;font-size:12px;"></div><button class="btn-m" onclick="salvarPix()">◆ Salvar</button><div style="margin-top:6px;font-size:11px;color:var(--sand-dark);">Atual: <strong style="color:var(--green-light);">' + (localStorage.getItem('arenaPix') || '00.000.000/0001-00') + '</strong></div>';
+    b.innerHTML = '<h4 style="font-family:Orbitron,monospace;font-size:12px;color:var(--green);margin-bottom:10px;">⚙️ Chave PIX</h4><div style="margin-bottom:10px;"><label style="font-size:11px;color:var(--sand-dark);display:block;margin-bottom:4px;">CHAVE PIX</label><input type="text" id="inpPix" style="width:100%;padding:7px 10px;background:var(--dark-3);border:1px solid var(--glass-border);border-radius:var(--radius-xs);color:#fff;font-size:12px;"></div><button class="btn-m" onclick="salvarPix()">◆ Salvar</button>';
   }
 }
-function carregarPix() { var el = document.getElementById("inpPix"); if (el) el.value = localStorage.getItem("arenaPix") || ""; }
-function salvarPix() {
-  var v = document.getElementById('inpPix').value.trim();
-  if (v) {
-    localStorage.setItem('arenaPix', v);
-    // Sincroniza chave PIX com Supabase
-    if (window.supabaseSync) supabaseSync.saveConfig('pix', v);
-    toast('◆ Chave salva!');
-  }
+function limparPedidos() {
+  if (!confirm('Excluir TODOS os pedidos?')) return;
+  localStorage.setItem('arenaPed', '[]'); renderAdmin('pedidos'); toast('◆ Todos excluidos');
 }
 function excluirPedido(idx) {
   if (!confirm('Excluir este pedido?')) return;
   var ped = getPedidos();
-    if (idx >= 0 && idx < ped.length) {
-      var pedId = ped[idx].id;
-      ped.splice(idx, 1);
-      localStorage.setItem("arenaPed", JSON.stringify(ped));
-      // Sincroniza exclusao e atualiza cache
-      if (window.supabaseSync) {
-        supabaseSync.deletePedido(pedId).then(function() {
-          supabaseSync.loadPedidos().then(function(p) { if (p) _pedidosCache = p; });
-        });
-      }
-    renderAdmin('pedidos');
-    toast('◆ Pedido excluido');
-  }
+  if (idx >= 0 && idx < ped.length) { ped.splice(idx, 1); localStorage.setItem('arenaPed', JSON.stringify(ped)); renderAdmin('pedidos'); toast('◆ Pedido excluido'); }
 }
-function limparPedidos() {
-  if (!confirm("Excluir TODOS os pedidos?")) return;
-  localStorage.setItem("arenaPed", "[]");
-  _pedidosCache = [];
-  // Sincroniza exclusao de todos
-  if (window.supabaseSync) supabaseSync.replaceAllPedidos([]);
-  renderAdmin("pedidos");
-  toast("◆ Todos excluidos");
-  toast('◆ Todos excluidos');
-}
+function salvarPix() { var v = document.getElementById('inpPix').value.trim(); if (v) { localStorage.setItem('arenaPix', v); toast('◆ Chave salva!'); } }
 function excluirProduto(idx) {
   if (!confirm('Excluir este produto?')) return;
   var p = FISICOS[idx]; if (!p) return;
@@ -2045,11 +1860,7 @@ function editarDescricao(idx) {
     inp.click();
   } else { salvarFisicos(); renderAdmin('estoque'); renderFisicos(catFisAtual); toast('⬜ Produto atualizado!'); }
 }
-function salvarFisicos() {
-  localStorage.setItem('arenaFisicos', JSON.stringify(FISICOS));
-  // Sincroniza catálogo de produtos com Supabase
-  if (window.supabaseSync) supabaseSync.saveAllProdutos(FISICOS);
-}
+function salvarFisicos() { localStorage.setItem('arenaFisicos', JSON.stringify(FISICOS)); }
 function adicionarProduto() {
   var nome = prompt('Nome do produto:'); if (!nome || !nome.trim()) return;
   var preco = parseFloat(prompt('Preco (R$):', '29.90').replace(',','.')); if (isNaN(preco) || preco <= 0) return;
@@ -2058,31 +1869,24 @@ function adicionarProduto() {
   var descLonga = prompt('Descricao detalhada (opcional):', desc) || desc;
   var id = 'p_' + Date.now().toString(36);
   FISICOS.push({id:id,cat:'outros',nome:nome.trim(),desc:desc,descCurta:desc,descLonga:descLonga,preco:preco,ico:'◆',badge:null,est:qtde});
-  salvarFisicos(); // ja sincroniza com Supabase
+  localStorage.setItem('arenaFisicos', JSON.stringify(FISICOS));
   var est = JSON.parse(localStorage.getItem('arenaEst') || '{}'); est[id] = qtde; localStorage.setItem('arenaEst', JSON.stringify(est));
-  if (window.supabaseSync) supabaseSync.updateEstoque(id, qtde);
   renderAdmin('estoque'); renderFisicos(catFisAtual); toast('⬜ Produto adicionado!');
 }
 function excluirJogo(key) {
   if (!confirm('Excluir este jogo?')) return;
   delete reservaSlots[key];
-  // Sync: exclui do Supabase se online
-  if (window.supabaseSync) supabaseSync.deleteReserva(key);
-  save(); renderAdmin('jogos'); toast('◆ Excluido');
+  try { localStorage.setItem('proarena_reservas', JSON.stringify({ events: state.events, year: state.year, reservas: reservaSlots })); } catch(e) {}
+  renderAdmin('jogos'); toast('◆ Excluido');
 }
 function limparJogosAntigos() {
   if (!confirm('Excluir jogos de dias passados?')) return;
   var agora = new Date();
-  var keysRemovidas = [];
   Object.keys(reservaSlots).forEach(function(k) {
     var r = reservaSlots[k];
-    if (r && r.date) { var d = new Date(r.date + 'T23:59:59'); if (d < agora) { delete reservaSlots[k]; keysRemovidas.push(k); } }
+    if (r && r.date) { var d = new Date(r.date + 'T23:59:59'); if (d < agora) delete reservaSlots[k]; }
   });
-  save();
-  // Sync: exclui cada reserva antiga do Supabase
-  if (window.supabaseSync && keysRemovidas.length > 0) {
-    keysRemovidas.forEach(function(k) { supabaseSync.deleteReserva(k); });
-  }
+  try { localStorage.setItem('proarena_reservas', JSON.stringify({ events: state.events, year: state.year, reservas: reservaSlots })); } catch(e) {}
   renderAdmin('jogos'); toast('◆ Antigos removidos');
 }
 function exportarJogos() {
