@@ -418,7 +418,26 @@
 <style>
 <style>/* LOJA CSS */
 
-/* ADMIN GLOBAL (fora da storeSection) */
+/* ADMIN GLOBAL - funciona fora da #storeSection */
+.admin-overlay { position: fixed; inset: 0; z-index: 200000; background: rgba(0,0,0,0.75); opacity: 0; visibility: hidden; transition: all .4s; }
+.admin-overlay.open { opacity: 1; visibility: visible; }
+.admin-modal { position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%)scale(0.92); z-index: 200001; width: 650px; max-width: calc(100vw - 32px); max-height: 85vh; background: var(--dark-2); border: 1px solid var(--glass-border); border-radius: var(--radius); padding: 0; opacity: 0; visibility: hidden; transition: all .4s; display: flex; flex-direction: column; overflow: hidden; }
+.admin-modal.open { opacity: 1; visibility: visible; transform: translate(-50%,-50%)scale(1); }
+.admin-modal .am-hd { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-bottom: 1px solid var(--glass-border); flex-shrink: 0; background: var(--dark-2); }
+.admin-modal .am-hd h3 { font-family: 'Orbitron', monospace; color: var(--green); font-size: 14px; display: flex; align-items: center; gap: 6px; }
+.admin-modal .am-close { background: none; border: none; color: #888; font-size: 20px; cursor: pointer; padding: 4px; }
+.admin-modal .am-close:hover { color: #fff; }
+.admin-login { padding: 24px; text-align: center; }
+.admin-login input { padding: 7px 12px; background: var(--dark-3); border: 1px solid var(--glass-border); border-radius: var(--radius-xs); color: #fff; font-size: 14px; font-family: 'Rajdhani', sans-serif; text-align: center; letter-spacing: 4px; width: 80px; margin-bottom: 8px; }
+.admin-login input:focus { outline: none; border-color: var(--green); }
+.admin-login .err { color: var(--red-light); font-size: 11px; display: none; }
+.admin-tabs { display: flex; gap: 3px; padding: 0 16px; border-bottom: 1px solid var(--glass-border); flex-shrink: 0; background: var(--dark-2); }
+.admin-tab { padding: 7px 13px; font-size: 11px; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; transition: all .3s; color: #888; font-family: 'Rajdhani', sans-serif; background: none; border-top: none; border-left: none; border-right: none; }
+.admin-tab:hover { color: #fff; }
+.admin-tab.active { color: var(--green); border-bottom-color: var(--green); }
+.admin-body { padding: 12px 16px; overflow-y: auto; flex: 1; min-height: 150px; background: var(--dark-2); }
+.admin-sair { margin-top: 8px; width: 100%; padding: 6px; background: transparent; border: 1px solid var(--red); color: var(--red-light); border-radius: var(--radius-xs); cursor: pointer; font-weight: 700; font-family: 'Rajdhani', sans-serif; font-size: 11px; transition: all .3s; }
+.admin-sair:hover { background: var(--red-glass); }
 .ae-item { display: flex; align-items: center; gap: 6px; padding: 5px 0; border-bottom: 1px solid var(--glass-border); }
 .ae-item .ae-icon { font-size: 14px; width: 22px; text-align: center; }
 .ae-item .ae-nome { flex: 1; font-size: 11px; color: #ddd; font-weight: 600; }
@@ -429,6 +448,7 @@
 .ped-card { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--radius-sm); padding: 10px 12px; margin-bottom: 7px; }
 .ped-card .pc-hd { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 3px; gap: 6px; }
 .ped-card .pc-cli { font-size: 13px; font-weight: 700; color: #fff; }
+.ped-card .pc-data { font-size: 10px; color: var(--sand-dark); white-space: nowrap; }
 .ped-card .pc-id { font-size: 9px; color: #555; font-family: monospace; }
 .ped-card .pc-info { font-size: 11px; color: #aaa; line-height: 1.4; }
 .ped-card .pc-info strong { color: var(--sand); }
@@ -438,6 +458,17 @@
 .ped-empty { text-align: center; padding: 20px 0; color: #555; font-size: 12px; }
 .fai-del { width: 22px; height: 22px; border-radius: 3px; border: 1px solid var(--glass-border); background: var(--dark-3); color: var(--red-light); cursor: pointer; font-size: 11px; transition: all .2s; display: flex; align-items: center; justify-content: center; }
 .fai-del:hover { border-color: var(--red); background: var(--red-glass); }
+.btn-m { padding: 7px 22px; background: var(--green); border: none; border-radius: var(--radius-sm); color: #fff; font-weight: 700; font-size: 12px; font-family: 'Rajdhani', sans-serif; cursor: pointer; transition: all .3s; }
+.btn-m:hover { background: var(--green-dark); }
+
+#storeSection{display:none;position:fixed;top:0;left:0;right:0;bottom:0;z-index:9999;background:#111;overflow-y:auto}
+
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&family=Special+Elite&display=swap');
+#storeSection * {margin:0;padding:0;box-sizing:border-box}
+:root{--green:#22c55e;--green-dark:#166534;--green-light:#4ade80;--green-glass:rgba(34,197,94,0.18);--green-glow:rgba(34,197,94,0.35);--red:#ef4444;--red-light:#f87171;--sand:#d4d4d4;--sand-dark:#a1a1aa;--dark:#111;--dark-2:#1a1a1a;--dark-3:#222;--glass-bg:rgba(255,255,255,0.06);--glass-border:rgba(255,255,255,0.10);--radius:16px;--radius-sm:10px;--radius-xs:6px}
+html {scroll-behavior:smooth}
+body {font-family:'Rajdhani',sans-serif;background:var(--dark);color:#e0e0e0;min-height:100vh;overflow-x:hidden}
+#storeSection #skullsCanvas {position:fixed;inset:0;z-index:0;width:100vw;height:100vh;pointer-events:none;opacity:.12}
 #storeSection ::-webkit-scrollbar {width:6px}
 #storeSection ::-webkit-scrollbar-track {background:var(--dark-2)}
 #storeSection ::-webkit-scrollbar-thumb {background:var(--green);border-radius:3px}
@@ -1242,6 +1273,93 @@
     <div class="admin-body" id="adminBody"></div>
     <div style="padding:6px 16px 10px;border-top:1px solid var(--glass-border);flex-shrink:0;">
       <button class="admin-sair" onclick="adminLogout()">◆ Sair</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- LOJA SECTION -->
+<div id="storeSection">
+
+
+
+
+<header class="topbar">
+  <a href="#" class="topbar-logo">⚔️ <span>ARENA</span> SQUAD <span class="badge">STORE</span></a>
+  <nav class="topbar-right">
+    <button class="topbar-link admin-link" onclick="openAdmin()">◆ Admin</button>
+    <button class="cart-btn" onclick="toggleCart()">◆ <span id="cartLabel">0</span><span class="cart-count" id="cartCount">0</span></button>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="hero-crosshair"></div>
+  <h1 class="fu">◆ <span>ARENA</span> STORE</h1>
+  <p class="fu fu1">Equipamento, munição e acessórios</p>
+  <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap;justify-content:center;position:relative;z-index:1">
+    <button onclick="mostrarTela('fisicos')" id="tabFisicos" style="background:var(--green);color:#fff;border:none;padding:8px 24px;border-radius:20px;cursor:pointer;font-weight:700;font-family:Orbitron,monospace;font-size:13px;letter-spacing:0.5px">◆ Produtos Físicos</button>
+    <button onclick="mostrarTela('online')" id="tabOnline" style="background:var(--glass-bg);color:var(--sand);border:1px solid var(--glass-border);padding:8px 24px;border-radius:20px;cursor:pointer;font-weight:700;font-family:Orbitron,monospace;font-size:13px;letter-spacing:0.5px">◆ Produtos Online</button>
+  </div>
+</section>
+
+<!-- PRODUTOS FÍSICOS -->
+<section class="section" id="telaFisicos">
+  <div class="section-header fu"><h2>◆ <span>Produtos Físicos</span></h2><p style="color:var(--sand-dark);font-size:13px;margin-top:4px">Itens com estoque físico — retirada na arena</p></div>
+  <div class="cat-tabs fu" id="catTabsFisicos"></div>
+  <div class="product-grid" id="productGridFisicos"></div>
+</section>
+
+<!-- PRODUTOS ONLINE -->
+<section class="section" id="telaOnline" style="display:none">
+  <div class="section-header fu"><h2>◆ <span>Produtos Online</span></h2><p style="color:var(--sand-dark);font-size:13px;margin-top:4px">Vouchers, planos e cursos — entrega imediata</p></div>
+  <div class="cat-tabs fu" id="catTabsOnline"></div>
+  <div class="product-grid" id="productGridOnline"></div>
+</section>
+
+<!-- CARRINHO -->
+<div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+<div class="cart-sidebar" id="cartSidebar">
+  <div class="cart-header"><h3>◆ <span>Carrinho</span></h3><button class="cart-close" onclick="toggleCart()">✕</button></div>
+  <div class="cart-itens" id="cartItens"><div class="cart-vazio"><div class="ic">◆</div>Carrinho vazio</div></div>
+  <div class="cart-footer">
+    <div class="cart-total"><span>Total</span><span class="val" id="cartTotal">R$ 0,00</span></div>
+    <div class="form-ret">
+      <label>Nome completo *</label><input type="text" id="retNome" placeholder="Seu nome">
+      <div class="erro" id="eNome">Digite seu nome</div>
+      <label>WhatsApp *</label><input type="tel" id="retTel" placeholder="(47) 99999-9999">
+      <div class="erro" id="eTel">Telefone inválido</div>
+      <label>Data retirada *</label><input type="date" id="retData">
+      <div class="erro" id="eData">Selecione a data</div>
+      <label>Observações</label><textarea id="retObs" placeholder="Opcional"></textarea>
+    </div>
+    <button class="btn-final" id="btnFinal" onclick="finalizarCompra()">⬜ Reservar Pedido</button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"><span>◆</span><span id="toastMsg"></span></div>
+
+<!-- MODAL CONFIRMA -->
+<div class="modal-overlay" id="modalConf">
+  <div class="modal"><div class="m-icon">◆</div><h3>Pedido Reservado!</h3><p>Pedido registrado com sucesso.</p><div class="m-detail" id="mDetail"></div><div class="m-total" id="mTotal"></div><p style="font-size:11px;color:#555;">Confirmação enviada no WhatsApp</p><br><button class="btn-m" onclick="fecharConf()">Fechar</button></div>
+</div>
+
+<!-- MODAL PIX -->
+<div class="modal-overlay" id="modalPix">
+  <div class="modal">
+    <div class="m-icon">◆</div>
+    <h3>Pagamento via PIX</h3>
+    <p style="margin-bottom:10px">Deseja pagar adiantado para garantir sua reserva?</p>
+    <div style="display:flex;gap:10px;justify-content:center;margin:12px 0">
+      <button onclick="fecharPix()" style="flex:1;padding:10px;border-radius:var(--radius-xs);border:1px solid var(--glass-border);background:transparent;color:#888;cursor:pointer;font-weight:700;font-family:Rajdhani,sans-serif;font-size:14px">Nao, retirando pagarei</button>
+      <button onclick="gerarPix()" style="flex:1;padding:10px;border-radius:var(--radius-xs);border:none;background:var(--green);color:#fff;cursor:pointer;font-weight:700;font-family:Rajdhani,sans-serif;font-size:14px">Sim, quero PIX</button>
+    </div>
+    <div id="pixInfo" style="display:none;margin-top:10px;padding:14px;background:var(--dark-3);border-radius:var(--radius-xs);border:1px dashed var(--green)">
+      <div style="font-size:12px;color:var(--sand-dark);margin-bottom:6px;font-weight:600">CHAVE PIX (CNPJ)</div>
+      <div id="pixChaveDisplay" style="font-family:Courier New,monospace;font-size:14px;color:var(--green-light);word-break:break-all;padding:8px;background:var(--dark);border-radius:4px;margin-bottom:8px">00.000.000/0001-00</div>
+      <button onclick="copiarPix()" style="width:100%;padding:8px;border-radius:var(--radius-xs);border:1px solid var(--green);background:var(--green-glass);color:var(--green);cursor:pointer;font-weight:700;font-family:Rajdhani,sans-serif;font-size:13px">◆ Copiar Chave</button>
+      <div style="margin-top:10px;font-size:12px;color:var(--sand);text-align:center">Apos pagar, clique abaixo para enviar comprovante</div>
+      <button onclick="enviarComprovante()" style="width:100%;padding:8px;border-radius:var(--radius-xs);border:none;background:var(--green-dark);color:#fff;cursor:pointer;font-weight:700;font-family:Rajdhani,sans-serif;font-size:13px;margin-top:6px">◆ Confirmacao Compra WhatsApp</button>
     </div>
   </div>
 </div>
