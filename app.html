@@ -57,7 +57,8 @@
             -moz-osx-font-smoothing: grayscale;
         }
         /* Touch-friendly tap targets */
-        button, a, .wd, .clickable, input, select, textarea { touch-action: manipulation; }
+        button, a, .clickable, input, select, textarea { touch-action: manipulation; }
+        html, body { overflow-y: auto !important; -webkit-overflow-scrolling: touch !important; touch-action: auto !important; }
         /* Scrollbar styling */
         ::-webkit-scrollbar { width: 4px; height: 4px; }
         ::-webkit-scrollbar-track { background: transparent; }
@@ -67,7 +68,17 @@
             position: fixed; inset: 0; z-index: 0;
             width: 100vw; height: 100vh;
             pointer-events: none;
-            opacity: 0.6;
+            opacity: 0.4;
+        }
+        /* Logo realista background */
+        body::before {
+            content: ''; position: fixed; inset: 0; z-index: -1;
+            background-image: url('Logo realista.jpeg');
+            background-size: cover; background-position: center;
+            filter: blur(3px) brightness(0.3);
+            opacity: 0.5;
+            pointer-events: none;
+        }
         }
 	        .topbar {
             position: sticky; top: 0; z-index: 100;
@@ -93,8 +104,8 @@
         .topbar-brand .icon::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(34,197,94,0.08), transparent); }
         .topbar-brand h1 { font-family: 'Special Elite', 'Orbitron', monospace; font-size: clamp(14px, 3.5vw, 18px); font-weight: 400; color: var(--green); letter-spacing: 2px; }
         .topbar-brand h1 span { color: var(--sand); }
-        .topbar-actions { display: flex; gap: 6px; animation: fadeSlideIn 0.5s ease 0.15s both; }
-        .topbar-actions button { background: var(--glass-bg); border: 1px solid var(--glass-border); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); color: var(--green); padding: 8px 12px; border-radius: 10px; cursor: pointer; font-size: clamp(11px, 2.5vw, 12px); font-weight: 700; font-family: 'Rajdhani', sans-serif; text-transform: uppercase; letter-spacing: 0.5px; transition: all .25s; white-space: nowrap; min-height: 38px; position: relative; overflow: hidden; }
+        .topbar-actions { display: flex; gap: 6px; animation: fadeSlideIn 0.5s ease 0.15s both; align-items: center; flex-wrap: wrap; }
+        .topbar-actions button { background: var(--glass-bg); border: 1px solid var(--glass-border); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); color: var(--green); padding: 8px 12px; border-radius: 10px; cursor: pointer; font-size: clamp(11px, 2.5vw, 12px); font-weight: 700; font-family: 'Rajdhani', sans-serif; text-transform: uppercase; letter-spacing: 0.5px; transition: all .25s; white-space: nowrap; min-height: 38px; position: relative; overflow: hidden; display: inline-flex; align-items: center; justify-content: center; gap: 4px; }
         .topbar-actions button::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, transparent, rgba(255,255,255,0.03)); opacity: 0; transition: opacity .3s; }
         .topbar-actions button:hover::before { opacity: 1; }
         .topbar-actions button:hover { background: var(--green-glass); border-color: rgba(34,197,94,0.3); transform: translateY(-1px); }
@@ -234,6 +245,7 @@
         @keyframes toastOut { to { opacity: 0; transform: translateY(20px); } }
 
         @media (max-width: 748px) {
+            html, body { overflow-y: auto !important; -webkit-overflow-scrolling: touch !important; }
             html, body { overflow-x: hidden; width: 100%; overscroll-behavior: none; }
             img, video, canvas, iframe { max-width: 100%; height: auto; }
             input, select, textarea, button { max-width: 100%; box-sizing: border-box; font-size: 16px !important; }
