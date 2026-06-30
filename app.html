@@ -717,19 +717,13 @@ n.scroll-hint {
         <button onclick="window.location.href='index.html'" style="background:var(--glass-bg);border:1px solid var(--glass-border);color:var(--sand);padding:7px 12px;border-radius:10px;cursor:pointer;font-size:12px;font-weight:600;font-family:'Rajdhani',sans-serif;" title="Voltar ao Site">◀ Site</button>
         <button onclick="abrirLoja()" style="background:var(--green-glass);border:1px solid var(--green);color:var(--green);padding:7px 12px;border-radius:10px;cursor:pointer;font-size:12px;font-weight:700;font-family:Rajdhani,sans-serif;letter-spacing:0.5px">🛒 Loja</button>
         <button onclick="openAdmin()" style="background:var(--glass-bg);border:1px solid var(--glass-border);color:var(--sand-dark);padding:7px 12px;border-radius:10px;cursor:pointer;font-size:12px;font-weight:600;font-family:Rajdhani,sans-serif;">⚙️ Admin</button>
+        <button class="btn-today" onclick="goToday()">◆ Atual</button>
         <button onclick="prevYear()" style="background:var(--glass-bg);border:1px solid var(--glass-border);color:var(--green);padding:7px 12px;border-radius:10px;cursor:pointer;font-size:14px;font-weight:700;font-family:Rajdhani,sans-serif;line-height:1;">◀</button>
         <button onclick="nextYear()" style="background:var(--glass-bg);border:1px solid var(--glass-border);color:var(--green);padding:7px 12px;border-radius:10px;cursor:pointer;font-size:14px;font-weight:700;font-family:Rajdhani,sans-serif;line-height:1;">▶</button>
     </div>
     </div>
 <div class="scroll-hint">↓ Role para ver o calendário</div>
 
-<div class="year-section">
-    <div class="year-header" style="justify-content:center;">
-        <div class="year-nav">
-            <button class="btn-today" onclick="goToday()">◆ Atual</button>
-        </div>
-    </div>
-</div>
 
 <div class="months-grid" id="monthsGrid"></div>
 
