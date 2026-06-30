@@ -708,17 +708,15 @@ body {font-family:'Rajdhani',sans-serif;background:var(--dark);color:#e0e0e0;min
         <button class="hide-mobile" onclick="goToday()">◆ Hoje</button>
         <button onclick="abrirLoja()" style="background:var(--green-glass);border:1px solid var(--green);color:var(--green);padding:7px 12px;border-radius:10px;cursor:pointer;font-size:12px;font-weight:700;font-family:Rajdhani,sans-serif;letter-spacing:0.5px">🛒 Loja</button>
         <button onclick="openAdmin()" style="background:var(--glass-bg);border:1px solid var(--glass-border);color:var(--sand-dark);padding:7px 12px;border-radius:10px;cursor:pointer;font-size:12px;font-weight:600;font-family:Rajdhani,sans-serif;">⚙️ Admin</button>
-        <button class="btn-primary" onclick="if(state.panelDay&&state.panelMonth!=null)iniciarReserva(state.year+'-'+String(state.panelMonth+1).padStart(2,'0')+'-'+String(state.panelDay).padStart(2,'0'),'08:00')">+ Novo</button>
+        <button onclick="prevYear()" style="background:var(--glass-bg);border:1px solid var(--glass-border);color:var(--green);padding:7px 12px;border-radius:10px;cursor:pointer;font-size:14px;font-weight:700;font-family:Rajdhani,sans-serif;line-height:1;">◀</button>
+        <button onclick="nextYear()" style="background:var(--glass-bg);border:1px solid var(--glass-border);color:var(--green);padding:7px 12px;border-radius:10px;cursor:pointer;font-size:14px;font-weight:700;font-family:Rajdhani,sans-serif;line-height:1;">▶</button>
     </div>
 </div>
 
 <div class="year-section">
-    <div class="year-header">
-        <h1><span>ARENA SQUAD</span> <span style="color:var(--sand);font-size:clamp(12px,2.5vw,16px)">VILA NOVA</span></h1>
+    <div class="year-header" style="justify-content:center;">
         <div class="year-nav">
-            <button onclick="prevYear()">◀</button>
-            <button class="btn-today" onclick="goToday()">◆</button>
-            <button onclick="nextYear()">▶</button>
+            <button class="btn-today" onclick="goToday()">◆ Hoje</button>
         </div>
     </div>
 </div>
