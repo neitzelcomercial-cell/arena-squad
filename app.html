@@ -689,6 +689,16 @@ body {font-family:'Rajdhani',sans-serif;background:var(--dark);color:#e0e0e0;min
 }
 @keyframes fu{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
 #storeSection .fu {animation:fu .4s ease both}.fu1{animation-delay:.05s}.fu2{animation-delay:.1s}.fu3{animation-delay:.15s}
+n.scroll-hint {
+    text-align: center; padding: 12px 16px; font-size: clamp(13px, 3vw, 15px);
+    font-weight: 600; color: rgba(255,255,255,0.25); letter-spacing: 1px;
+    animation: scrollBounce 2s ease-in-out infinite; position: relative; z-index: 1;
+}
+@keyframes scrollBounce {
+    0%, 100% { transform: translateY(0); opacity: 0.3; }
+    50% { transform: translateY(6px); opacity: 0.7; }
+}
+@media (min-width: 749px) { .scroll-hint { display: none; } }
 
 
 </style>
@@ -705,18 +715,18 @@ body {font-family:'Rajdhani',sans-serif;background:var(--dark);color:#e0e0e0;min
     </div>
     <div class="topbar-actions">
         <button onclick="window.location.href='index.html'" style="background:var(--glass-bg);border:1px solid var(--glass-border);color:var(--sand);padding:7px 12px;border-radius:10px;cursor:pointer;font-size:12px;font-weight:600;font-family:'Rajdhani',sans-serif;" title="Voltar ao Site">◀ Site</button>
-        <button class="hide-mobile" onclick="goToday()">◆ Hoje</button>
         <button onclick="abrirLoja()" style="background:var(--green-glass);border:1px solid var(--green);color:var(--green);padding:7px 12px;border-radius:10px;cursor:pointer;font-size:12px;font-weight:700;font-family:Rajdhani,sans-serif;letter-spacing:0.5px">🛒 Loja</button>
         <button onclick="openAdmin()" style="background:var(--glass-bg);border:1px solid var(--glass-border);color:var(--sand-dark);padding:7px 12px;border-radius:10px;cursor:pointer;font-size:12px;font-weight:600;font-family:Rajdhani,sans-serif;">⚙️ Admin</button>
         <button onclick="prevYear()" style="background:var(--glass-bg);border:1px solid var(--glass-border);color:var(--green);padding:7px 12px;border-radius:10px;cursor:pointer;font-size:14px;font-weight:700;font-family:Rajdhani,sans-serif;line-height:1;">◀</button>
         <button onclick="nextYear()" style="background:var(--glass-bg);border:1px solid var(--glass-border);color:var(--green);padding:7px 12px;border-radius:10px;cursor:pointer;font-size:14px;font-weight:700;font-family:Rajdhani,sans-serif;line-height:1;">▶</button>
     </div>
-</div>
+    </div>
+n<div class="scroll-hint">↓ Role para ver o calendário</div>
 
 <div class="year-section">
     <div class="year-header" style="justify-content:center;">
         <div class="year-nav">
-            <button class="btn-today" onclick="goToday()">◆ Hoje</button>
+            <button class="btn-today" onclick="goToday()">◆ Atual</button>
         </div>
     </div>
 </div>
