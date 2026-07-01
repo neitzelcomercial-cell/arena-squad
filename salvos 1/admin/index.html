@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calendário de Reservas - Arena Squad</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/calendar.css">
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div class="container nav-inner">
+      <a href="../index.html" class="nav-logo">
+        <i class="fas fa-crosshairs"></i> Arena Squad
+      </a>
+      <div class="nav-links">
+        <a href="../index.html">Site Institucional</a>
+        <a href="#" class="nav-active">Calendário</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="container">
+      <h1><i class="fas fa-calendar-alt"></i> Calendário de Reservas</h1>
+      <p>Reserve seu horário para jogar na Arena Squad</p>
+    </div>
+  </header>
+
+  <!-- CALENDAR -->
+  <section class="calendar-section">
+    <div class="container">
+
+      <!-- Calendar Controls -->
+      <div class="calendar-controls">
+        <button id="prevMonth" class="btn-control">
+          <i class="fas fa-chevron-left"></i> Anterior
+        </button>
+        <h2 id="currentMonth">Janeiro 2026</h2>
+        <button id="nextMonth" class="btn-control">
+          Próximo <i class="fas fa-chevron-right"></i>
+        </button>
+      </div>
+
+      <!-- Calendar Grid -->
+      <div class="calendar-wrapper">
+        <div class="calendar-weekdays">
+          <div>DOM</div>
+          <div>SEG</div>
+          <div>TER</div>
+          <div>QUA</div>
+          <div>QUI</div>
+          <div>SEX</div>
+          <div>SÁB</div>
+        </div>
+        <div class="calendar-days" id="calendarDays">
+          <!-- Gerado via JS -->
+        </div>
+      </div>
+
+      <!-- Legend -->
+      <div class="calendar-legend">
+        <div class="legend-item">
+          <span class="legend-color available"></span>
+          <span>Disponível</span>
+        </div>
+        <div class="legend-item">
+          <span class="legend-color partial"></span>
+          <span>Parcialmente Reservado</span>
+        </div>
+        <div class="legend-item">
+          <span class="legend-color full"></span>
+          <span>Totalmente Reservado</span>
+        </div>
+        <div class="legend-item">
+          <span class="legend-color closed"></span>
+          <span>Arena Fechada</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- MODAL: HORÁRIOS DO DIA -->
+  <div class="modal" id="slotsModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3><i class="fas fa-clock"></i> Horários Disponíveis</h3>
+        <button class="modal-close" id="closeSlotsModal">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p class="selected-date" id="selectedDate">01 de Janeiro de 2026</p>
+        <div class="slots-list" id="slotsList">
+          <!-- Gerado via JS -->
+        </div>
+        <div class="admin-controls">
+          <button id="toggleArenaStatus" class="btn-admin">
+            <i class="fas fa-lock"></i> Fechar/Abrir Arena (Admin)
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: FORMULÁRIO DE RESERVA -->
+  <div class="modal" id="reservationModal">
+    <div class="modal-content modal-large">
+      <div class="modal-header">
+        <h3><i class="fas fa-calendar-check"></i> Reservar Horário</h3>
+        <button class="modal-close" id="closeReservationModal">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="reservationForm">
+          <div class="form-group">
+            <label>Data e Horário</label>
+            <input type="text" id="reservationDateTime" readonly class="form-input">
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Nome do Jogo *</label>
+              <input type="text" id="gameName" class="form-input" placeholder="Ex: Operação Resgate" required>
+            </div>
+            <div class="form-group">
+              <label>Seu Nome *</label>
+              <input type="text" id="playerName" class="form-input" placeholder="Nome completo" required>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>WhatsApp *</label>
+              <input type="tel" id="whatsapp" class="form-input" placeholder="(47) 98420-2188" required>
+            </div>
+            <div class="form-group">
+              <label>Modo de Jogo *</label>
+              <select id="gameMode" class="form-input" required>
+                <option value="">Selecione...</option>
+                <option value="Capturar Bandeira">Capturar Bandeira</option>
+                <option value="Eliminação">Eliminação</option>
+                <option value="Domínio">Domínio</option>
+                <option value="Resgate">Resgate</option>
+                <option value="Escolta">Escolta</option>
+                <option value="Milsim">Milsim (Simulação Militar)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Estilo de Jogo *</label>
+            <div class="form-radio-group">
+              <label class="radio-label">
+                <input type="radio" name="gameStyle" value="aberto" required>
+                <span>Aberto</span>
+                <small>Qualquer pessoa pode participar</small>
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="gameStyle" value="privado">
+                <span>Privado</span>
+                <small>Apenas convidados</small>
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="gameStyle" value="campeonato">
+                <span>Campeonato</span>
+                <small>Jogo competitivo oficial</small>
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="gameStyle" value="evento">
+                <span>Evento</span>
+                <small>Evento especial/temático</small>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Tipo de Missão *</label>
+              <select id="missionType" class="form-input" required>
+                <option value="">Selecione...</option>
+                <option value="Resgate de Refém">Resgate de Refém</option>
+                <option value="Destruição de Objetivo">Destruição de Objetivo</option>
+                <option value="Defesa de Base">Defesa de Base</option>
+                <option value="Reconhecimento">Reconhecimento</option>
+                <option value="Emboscada">Emboscada</option>
+                <option value="Escolta VIP">Escolta VIP</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Pessoas Permitidas * <span id="playerCountValue">24</span></label>
+              <input type="range" id="allowedPlayers" class="form-range" min="8" max="40" value="24" step="1">
+              <div class="range-labels">
+                <span>Mín: 8</span>
+                <span>Máx: 40</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="checkbox-label">
+              <input type="checkbox" id="acceptRules" required>
+              <span>Li e aceito as <a href="#" id="showRulesLink">Regras de Campo</a> *</span>
+            </label>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" id="cancelReservation" class="btn-secondary">Cancelar</button>
+            <button type="submit" class="btn-primary">
+              <i class="fas fa-check"></i> Confirmar Reserva
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: REGRAS DE CAMPO -->
+  <div class="modal" id="rulesModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3><i class="fas fa-shield-alt"></i> Regras de Campo</h3>
+        <button class="modal-close" id="closeRulesModal">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="rules-section">
+          <h4>Segurança</h4>
+          <ul>
+            <li>Uso obrigatório de máscara de proteção facial homologada</li>
+            <li>Óculos de proteção balística obrigatório</li>
+            <li>FPS máximo: 400 FPS para rifles, 350 FPS para pistolas</li>
+            <li>Distância mínima de engajamento: 5 metros</li>
+            <li>Proibido remover proteção durante o jogo</li>
+          </ul>
+        </div>
+        <div class="rules-section">
+          <h4>Conduta</h4>
+          <ul>
+            <li>Respeito aos adversários, árbitros e colegas de equipe</li>
+            <li>Honra: ao ser atingido, sinalize "MORTO" e saia do jogo</li>
+            <li>Proibido disparo em jogadores já eliminados</li>
+            <li>Proibido agressão física ou verbal</li>
+            <li>Siga as orientações dos árbitros em campo</li>
+          </ul>
+        </div>
+        <div class="rules-section">
+          <h4>Equipamentos</h4>
+          <ul>
+            <li>Réplicas devidamente cromadas (ponta laranja)</li>
+            <li>BBs biodegradáveis obrigatórias (0.20g ou superior)</li>
+            <li>Carregadores: máximo 400 BBs por carregador</li>
+            <li>Granadas: apenas de gás ou de impacto homologadas</li>
+            <li>Proibido uso de facas reais ou objetos cortantes</li>
+          </ul>
+        </div>
+        <div class="rules-section">
+          <h4>Penalidades</h4>
+          <ul>
+            <li>1ª infração: Advertência verbal</li>
+            <li>2ª infração: Suspensão da partida</li>
+            <li>3ª infração: Expulsão do evento e banimento temporário</li>
+            <li>Infrações graves: Banimento permanente</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: SENHA ADMIN -->
+  <div class="modal" id="adminPasswordModal">
+    <div class="modal-content modal-small">
+      <div class="modal-header">
+        <h3><i class="fas fa-key"></i> Senha de Administrador</h3>
+        <button class="modal-close" id="closeAdminPasswordModal">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Digite a senha de administrador:</label>
+          <input type="password" id="adminPassword" class="form-input" placeholder="Senha">
+        </div>
+        <div class="form-actions">
+          <button id="cancelAdminPassword" class="btn-secondary">Cancelar</button>
+          <button id="confirmAdminPassword" class="btn-primary">Confirmar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/reservations.js"></script>
+  <script src="js/calendar.js"></script>
+</body>
+</html>
