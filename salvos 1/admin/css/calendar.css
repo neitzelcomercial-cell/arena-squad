@@ -163,12 +163,37 @@ body {
   border-radius: var(--radius-sm);
 }
 
-.calendar-controls h2 {
-  font-size: 1.8rem;
-  font-weight: var(--font-weight-black);
+.calendar-selectors {
+  display: flex;
+  gap: var(--spacing-sm);
+  align-items: center;
+}
+
+.calendar-select {
+  background: rgba(26, 31, 26, 0.8);
+  border: 2px solid var(--color-border);
   color: var(--color-light);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-sm);
+  font-size: 1rem;
+  font-weight: var(--font-weight-bold);
+  font-family: var(--font-primary);
   text-transform: uppercase;
   letter-spacing: 1px;
+  cursor: pointer;
+  transition: var(--transition);
+  min-width: 150px;
+}
+
+.calendar-select:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 8px rgba(74, 95, 58, 0.4);
+}
+
+.calendar-select:hover {
+  border-color: var(--color-primary);
+  background: rgba(74, 95, 58, 0.2);
 }
 
 .btn-control {

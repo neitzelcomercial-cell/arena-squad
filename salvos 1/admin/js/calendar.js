@@ -21,10 +21,9 @@ function renderCalendar(year, month) {
   const firstDayOfWeek = firstDay.getDay();
   const prevMonthDays = prevLastDay.getDate();
 
-  const monthNames = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
-    'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
-
-  document.getElementById('currentMonth').textContent = `${monthNames[month]} ${year}`;
+  // Sync selectors with current date
+  document.getElementById('monthSelector').value = month;
+  document.getElementById('yearSelector').value = year;
 
   const calendarDays = document.getElementById('calendarDays');
   calendarDays.innerHTML = '';
@@ -294,10 +293,38 @@ function closeAllModals() {
   });
 }
 
+function populateYearSelector() {
+  const yearSelector = document.getElementById('yearSelector');
+  const currentYear = new Date().getFullYear();
+  const startYear = currentYear - 1;
+  const endYear = currentYear + 5;
+
+  for (let year = startYear; year <= endYear; year++) {
+    const option = document.createElement('option');
+    option.value = year;
+    option.textContent = year;
+    yearSelector.appendChild(option);
+  }
+}
+
+// ========================================
+// SELECTOR EVENT LISTENERS
+// ========================================
+document.getElementById('monthSelector').addEventListener('change', (e) => {
+  currentDate.setMonth(parseInt(e.target.value));
+  renderCalendar(currentDate.getFullYear(), currentDate.getMonth());
+});
+
+document.getElementById('yearSelector').addEventListener('change', (e) => {
+  currentDate.setFullYear(parseInt(e.target.value));
+  renderCalendar(currentDate.getFullYear(), currentDate.getMonth());
+});
+
 // ========================================
 // INITIALIZATION
 // ========================================
 document.addEventListener('DOMContentLoaded', () => {
+  populateYearSelector();
   renderCalendar(currentDate.getFullYear(), currentDate.getMonth());
   console.log('Arena Squad Calendar - Sistema iniciado');
 });
